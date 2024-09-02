@@ -9,9 +9,9 @@ import './views/TM'
 
 ApplicationWindow {
     id: mainWindow
-    minimumWidth: 900
+    minimumWidth: 1200
     minimumHeight:600
-    maximumWidth: 900
+    maximumWidth: 1200
     maximumHeight:600
     visible: true
     onClosing:{
@@ -42,7 +42,7 @@ ApplicationWindow {
         id: leftnavBar
         anchors.left: parent.left
         anchors.top: parent.top
-        width: mainWindow.width/4.5
+        width: 900/4.5
         // width:58
         height: parent.height
         color: "#121B28"
@@ -97,6 +97,9 @@ ApplicationWindow {
                     content.spacing: 15
                     onClicked:{
                         checked=true
+                        if (stack.currentItem.objectName!=buttonText){
+                            stack.replace('./views/'+buttonText+'.qml')
+                        }
                     }
 
                 }
@@ -127,6 +130,9 @@ ApplicationWindow {
                     content.spacing: 15
                     onClicked:{
                         checked=true
+                        if (stack.currentItem.objectName!=buttonText){
+                            stack.replace('./views/'+buttonText+'.qml')
+                        }
                     }
 
                 }
@@ -152,6 +158,9 @@ ApplicationWindow {
                     content.spacing: 15
                     onClicked:{
                         checked=true
+                        if (stack.currentItem.objectName!=buttonText){
+                            stack.replace('./views/'+buttonText+'.qml')
+                        }
                     }
 
                 }
@@ -177,6 +186,9 @@ ApplicationWindow {
                     content.spacing: 15
                     onClicked:{
                         checked=true
+                        if (stack.currentItem.objectName!=buttonText){
+                            stack.replace('./views/'+buttonText+'.qml')
+                        }
                     }
 
                 }
@@ -202,6 +214,9 @@ ApplicationWindow {
                     content.spacing: 15
                     onClicked:{
                         checked=true
+                        if (stack.currentItem.objectName!=buttonText){
+                            stack.replace('./views/'+buttonText+'.qml')
+                        }
                     }
 
                 }
@@ -227,6 +242,9 @@ ApplicationWindow {
                     content.spacing: 15
                     onClicked:{
                         checked=true
+                        if (stack.currentItem.objectName!=buttonText){
+                            stack.replace('./views/'+buttonText+'.qml')
+                        }
                     }
                 }
                 Item{
@@ -255,6 +273,9 @@ ApplicationWindow {
                     content.spacing: 15
                     onClicked:{
                         checked=true
+                        if (stack.currentItem.objectName!=buttonText){
+                            stack.replace('./views/'+buttonText+'.qml')
+                        }
                         
                     }
 

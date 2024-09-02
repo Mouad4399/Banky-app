@@ -6,3 +6,6 @@ TextField_ 1.0 TextField.qml
 Button_ 1.0 Button.qml 
 PalletListModel_ 1.0 PalletListModel.qml 
 RowButton_ 1.0 RowButton.qml
+
+ComboBox_ 1.0 ComboBox.qml
+EmptyField_ 1.0 EmptyField.qml
