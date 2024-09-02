@@ -1,6 +1,6 @@
 import QtQuick
 import QtQuick.Controls
-
+import Qt5Compat.GraphicalEffects
 import Fonts 1.0
 AbstractButton {
     id: button
@@ -23,7 +23,9 @@ AbstractButton {
     property bool fontUnderline: false
     property string imageSource: ""
     property string imageColor: ''
+    property real imageRadius
     property alias imageSize: innerImage.sourceSize
+    property alias image: innerImage
     property bool enabledEffect:button.buttonText!==''
     property color disabledBgColor: "transparent"
     property color disabledImageColor: "transparent"
@@ -59,13 +61,24 @@ AbstractButton {
             font.underline:button.fontUnderline
         }
         ColorImage {
-            id:innerImage
+            id: innerImage
+            // property real radius
             anchors.centerIn: parent
             source: imageSource
             color:button.enabled ? button.imageColor==='' ?color:button.imageColor : button.disabledImageColor
             // sourceSize.height: 32
             // sourceSize.width:16
             antialiasing: true
+            // visible: false // this is needed or the corners of the image will be visible underneath the opacity mask
+            layer.enabled:button.imageRadius>0.0
+            layer.effect:OpacityMask {
+                maskSource: Rectangle {
+                    width: innerImage.width
+                    height: innerImage.height
+                    radius: button.imageRadius
+                    // visible: false // this also needs to be invisible or it will cover up the image
+                }
+            }
         }
     }
     states: [

@@ -10,5 +10,5 @@ urlpatterns=[
     path('logout/',views.user_logout , name='logout'),
     path('test/',views.test , name='test'),
     path('kyc/',views.kyc_registration , name='kyc'),
-    path('kyc/file/media/kyc/<str:file_path>/', views.get_file, name='get-file'),
+    path('kyc/file/<str:file>', views.get_file, name='get-file'),
 ]

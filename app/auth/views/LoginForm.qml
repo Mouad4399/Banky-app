@@ -29,6 +29,21 @@ Rectangle {
 
                 // }
 
+                Component.onCompleted:{
+                    window.getAttr('authenticate').finished.connect(function (code,json) {
+                                        busypopup.close();
+                                        if (code === 200) {
+                                            main_app.goToApp();
+                                            console.log('login successful')
+                                        }else{
+                                            // console.log(code)
+                                            auth_error_message = json.detail;
+                                            console.log(auth_error_message)
+                                        }
+                                        
+                                    });
+                }
+
                 property var loginFormData: {
                     "username": '',
                     "password": ''
@@ -105,17 +120,6 @@ Rectangle {
                                 // console.log(window)
                                 window.getAttr('authenticate').sendRequest(loginFormData);
                                 busypopup.open();
-                                window.getAttr('authenticate').finished.connect(function (code,json) {
-                                        busypopup.close();
-                                        if (code === 200) {
-                                            main_app.goToApp();
-                                            console.log('login successful')
-                                        }else{
-                                            auth_error_message = json.detail;
-                                            console.log(auth_error_message)
-                                        }
-                                        
-                                    });
 
                             }
                             Text {

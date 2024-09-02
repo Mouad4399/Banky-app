@@ -21,23 +21,26 @@ class Logout(QThread):
     def run(self):
         try:
             response=requests.post("http://127.0.0.1:8000/user/logout/",headers={'Authorization': f'Token {self.main_app.user_info.get("token")}'})
+
+            if response:
+                # self.main_app.user_info=response.json()
+                print("Logout ...")
+                print(self.main_app.user_info)
+                
+                # self.main_app.engine.rootContext().setContextProperty('user_info',self.main_app.user_info)        
+                
+                # self.main_app.engine.rootContext().setContextProperty('user_profile_info',self.main_app.user_profile_info)        
+                
+                self.finished.emit(response.status_code,response.json())
+            else:
+                print("logout.py : there is some problem")
+                details= response.json()
+                print(details)
+                self.finished.emit(response.status_code, response.json())
+                
         except:
-            self.finished.emit(404,{'details':'host not responding'})
+            self.finished.emit(404,{'detail':'HOST_NOT_RESPONDING'})
             return
        
-        if response:
-            # self.main_app.user_info=response.json()
-            print(self.main_app.user_info)
-            
-            # self.main_app.engine.rootContext().setContextProperty('user_info',self.main_app.user_info)        
-            
-            # self.main_app.engine.rootContext().setContextProperty('user_profile_info',self.main_app.user_profile_info)        
-            
-            self.finished.emit(response.status_code,response.json())
-        else:
-            details= response.json()
-            print(details)
-            self.finished.emit(response.status_code, response.json())
-    
     
     

@@ -106,26 +106,30 @@ def kyc_registration(request):
         return Response(serializer.data, status=status.HTTP_200_OK)
        
 import os    
-from django.http import FileResponse,Http404,HttpResponseForbidden
+from django.http import FileResponse,Http404,HttpResponseForbidden,HttpResponse,JsonResponse
 from django.conf import settings         
 # @permission_classes([IsAuthenticated])
-def get_file(request,file_path):
+def get_file(request,file):
     token_key = request.GET.get('token')
 
     if token_key:
         try:
             token = Token.objects.get(key=token_key)
-            # Token is valid, so we proceed to serve the image
-            file_path = os.path.join(settings.MEDIA_ROOT, f"kyc/{file_path}")
+            user= token.user_id
+            user_kyc =KYC.objects.get(user=user)
+            data = KYCSerializer(KYC.objects.get(pk=user_kyc.id)).data
+            data_relative_path = data.get(file)
+            if not data_relative_path :
+                return JsonResponse({'detail': "data does not exist"})
+            file_path = os.path.join(settings.BASE_DIR, data_relative_path[1:])
             if os.path.exists(file_path):
                 return FileResponse(open(file_path, 'rb'))
             else:
-                print(f"{settings.MEDIA_ROOT} : not founded awlidi")
-                raise Http404("File not found")
+                raise JsonResponse({'detail': "data does not exist"})
         except Token.DoesNotExist:
-            return HttpResponseForbidden("Invalid or missing token")
+            return JsonResponse({'detail': "invalid token"})
 
-    return HttpResponseForbidden("You are not authorized to access this file")
+    return JsonResponse({'detail': "your are not authorized to access this file"})
 
 
 from rest_framework.authtoken.models import Token

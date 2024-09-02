@@ -31,7 +31,7 @@ ApplicationWindow {
                                     main_app.goToAuth();
                                     console.log('logout successful')
                                 }else{
-                                    toastmanager.show(true , "Authentication Error",json.detail+"\nYou are not Authorized to do this Action !")
+                                    toastmanager.show(false , "Authentication Error",json.detail+"Or You are not Authorized to do this Action !")
                                     var auth_error_message = json.detail;
                                     console.log(auth_error_message)
                                 }
@@ -232,6 +232,32 @@ ApplicationWindow {
                 Item{
                     Layout.fillHeight:true
                     Layout.fillWidth:true
+                }
+                RowButton_{
+                    hoverColor:Qt.lighter("#121B28", 1.5)
+                    pressColor:"#121b28"
+                    Layout.alignment:Qt.AlignCenter
+                    Layout.fillWidth:true
+                    Layout.preferredHeight:40
+                    imageSource:'data:image/svg+xml;utf8,<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.477 2 12C2 17.523 6.477 22 12 22C17.523 22 22 17.523 22 12C22 6.477 17.523 2 12 2ZM8.5 9.5C8.5 9.04037 8.59053 8.58525 8.76642 8.16061C8.94231 7.73597 9.20012 7.35013 9.52513 7.02513C9.85013 6.70012 10.236 6.44231 10.6606 6.26642C11.0852 6.09053 11.5404 6 12 6C12.4596 6 12.9148 6.09053 13.3394 6.26642C13.764 6.44231 14.1499 6.70012 14.4749 7.02513C14.7999 7.35013 15.0577 7.73597 15.2336 8.16061C15.4095 8.58525 15.5 9.04037 15.5 9.5C15.5 10.4283 15.1313 11.3185 14.4749 11.9749C13.8185 12.6313 12.9283 13 12 13C11.0717 13 10.1815 12.6313 9.52513 11.9749C8.86875 11.3185 8.5 10.4283 8.5 9.5ZM18.258 16.984C17.5092 17.9253 16.5575 18.6855 15.4739 19.2077C14.3904 19.7299 13.2029 20.0008 12 20C10.7971 20.0008 9.60965 19.7299 8.52607 19.2077C7.44249 18.6855 6.49081 17.9253 5.742 16.984C7.363 15.821 9.575 15 12 15C14.425 15 16.637 15.821 18.258 16.984Z" fill="#B0B4B8"/></svg>'
+                    imageSize.height:height/2
+                    buttonText:'Account'
+                    fontSize:11
+                    checkable:true
+                    autoExclusive: true
+                    imageColor:checked? "#121b28":"#a4a8ad"
+                    textColor:checked? "#121b28":"#a4a8ad"
+                    color:checked?"white":"#121b28"
+                    content.anchors.centerIn:undefined
+                    content.anchors.left:content.parent.left
+                    content.anchors.leftMargin:10
+                    content.anchors.verticalCenter:content.parent.verticalCenter
+                    content.spacing: 15
+                    onClicked:{
+                        checked=true
+                        
+                    }
+
                 }
                 RowButton_{
                     hoverColor:Qt.lighter("#121B28", 1.5)

@@ -13,7 +13,7 @@ class MainApp(QObject):
         super().__init__()
         self.app = QApplication(sys.argv)
         self.engine = QQmlApplicationEngine()
-        self.app.setWindowIcon(QIcon('application/res/images/banky_logo.svg'))
+        self.app.setWindowIcon(QIcon(str(Path(__file__).resolve().parent / 'application/res/images/banky_logo.svg')))
         
         
         # self.translator = QTranslator(self.app)

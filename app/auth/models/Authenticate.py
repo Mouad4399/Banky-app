@@ -23,22 +23,23 @@ class Authenticate(QThread):
     def run(self):
         try:
             response=requests.post("http://127.0.0.1:8000/user/login/",json=self.data)
+
+            if response:
+                self.main_app.user_info=response.json()
+                print(self.main_app.user_info)
+                
+                self.main_app.engine.rootContext().setContextProperty('user_info',self.main_app.user_info)        
+                
+                # self.main_app.engine.rootContext().setContextProperty('user_profile_info',self.main_app.user_profile_info)        
+                
+                self.finished.emit(response.status_code,response.json())
+            else:
+                details= response.json()
+                print(details)
+                self.finished.emit(response.status_code, response.json())
         except:
-            self.finished.emit(404,{'details':'host not responding'})
+            self.finished.emit(404,{'detail':'HOST_NOT_RESPONDING'})
             return
-        if response:
-            self.main_app.user_info=response.json()
-            print(self.main_app.user_info)
-            
-            self.main_app.engine.rootContext().setContextProperty('user_info',self.main_app.user_info)        
-            
-            # self.main_app.engine.rootContext().setContextProperty('user_profile_info',self.main_app.user_profile_info)        
-            
-            self.finished.emit(response.status_code,response.json())
-        else:
-            details= response.json()
-            print(details)
-            self.finished.emit(response.status_code, response.json())
     
     
     

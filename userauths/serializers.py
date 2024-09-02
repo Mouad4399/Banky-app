@@ -22,7 +22,6 @@ class UserRegisterSerializer(serializers.ModelSerializer):
         return user
 
 class KYCSerializer(serializers.ModelSerializer):
-    image=serializers.ImageField()
     class Meta:
         model = KYC
         fields ='__all__'
