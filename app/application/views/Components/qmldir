@@ -1,0 +1,8 @@
+module Components
+
+ScrollBar_ 1.0 ScrollBar.qml 
+SortFilterModel_ 1.0 SortFilterModel.qml 
+TextField_ 1.0 TextField.qml 
+Button_ 1.0 Button.qml 
+PalletListModel_ 1.0 PalletListModel.qml 
+RowButton_ 1.0 RowButton.qml
