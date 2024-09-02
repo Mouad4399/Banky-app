@@ -562,19 +562,119 @@ Rectangle{
                             Layout.fillHeight:true
                             color:"#eff1fc"
                             radius:9
-                            anchors.margins:10
-                            Button_{
-                                Layout.alignment:Qt.AlignLeft
-                                width:innerText.width + 48*2
-                                height:35
-                                buttonText:qsTranslate("","Submit")
-                                color: "#065AD8"
-                                borderColor: "#065AD8" 
-                                textColor: "white"
-                                fontWeight:600
-                                fontSize:10
-                                borderWidth:1
-                                onClicked:{
+                            ColumnLayout{
+                                anchors.fill:parent
+                                anchors.margins:10
+                                spacing:10
+                                ColorImage {
+                                    id: identity_image
+                                    // Layout.alignment:Qt.AlignHCenter|Qt.AlignTop
+                                    source: 'http://localhost:8000/user/kyc/file/identity_image?token=b8c04399b638cad5a07ba5fd4d05e58f4609aa77'
+                                    Layout.fillWidth:true
+                                    Layout.fillHeight:true
+                                    // Layout.preferredWidth:parent.width * 45/100
+                                    // Layout.preferredHeight:width
+                                    layer.enabled:true
+                                    layer.effect:OpacityMask {
+                                        maskSource: Rectangle {
+                                            width: identity_image.width
+                                            height: identity_image.height
+                                            radius: 8
+                                            // visible: false // this also needs to be invisible or it will cover up the image
+                                        }
+                                    }
+                                }
+                                RowLayout{
+                                    Layout.fillWidth:true
+                                    height:35
+                                    Text {
+                                        Layout.alignment:Qt.AlignLeft
+                                        text: "Your Identity : "
+                                        horizontalAlignment: Text.AlignLeft
+                                        font.family: Fonts.inter
+                                        wrapMode: Text.WordWrap
+                                        font.weight: 600
+                                        font.pointSize: 10
+                                        color: "black"
+                                    }
+                                    Item{
+                                        Layout.fillWidth:true
+                                    }
+                                    Button_{
+                                        Layout.alignment:Qt.AlignRight
+                                        width:innerText.width + 48*2
+                                        height:35
+                                        buttonText:qsTranslate("","Change")
+                                        color: "#065AD8"
+                                        borderColor: "#065AD8" 
+                                        textColor: "white"
+                                        fontWeight:600
+                                        fontSize:10
+                                        borderWidth:1
+                                        onClicked:{
+                                        }
+                                    }
+                                }
+                            }
+                            
+                        }
+                        Rectangle{
+                            Layout.fillWidth:true
+                            Layout.fillHeight:true
+                            color:"#eff1fc"
+                            radius:9
+                            ColumnLayout{
+                                anchors.fill:parent
+                                anchors.margins:10
+                                spacing:10
+                                ColorImage {
+                                    id: signature_image
+                                    // Layout.alignment:Qt.AlignHCenter|Qt.AlignTop
+                                    source: 'http://localhost:8000/user/kyc/file/identity_image?token=b8c04399b638cad5a07ba5fd4d05e58f4609aa77'
+                                    Layout.fillWidth:true
+                                    Layout.fillHeight:true
+                                    // Layout.preferredWidth:parent.width * 45/100
+                                    // Layout.preferredHeight:width
+                                    layer.enabled:true
+                                    layer.effect:OpacityMask {
+                                        maskSource: Rectangle {
+                                            width: signature_image.width
+                                            height: signature_image.height
+                                            radius: 8
+                                            // visible: false // this also needs to be invisible or it will cover up the image
+                                        }
+                                    }
+                                }
+                                RowLayout{
+                                    Layout.fillWidth:true
+                                    height:35
+                                    Text {
+                                        Layout.alignment:Qt.AlignLeft
+                                        text: "Your Signature : "
+                                        horizontalAlignment: Text.AlignLeft
+                                        font.family: Fonts.inter
+                                        wrapMode: Text.WordWrap
+                                        font.weight: 600
+                                        font.pointSize: 10
+                                        color: "black"
+                                    }
+                                    Item{
+                                        Layout.fillWidth:true
+                                    }
+                                    Button_{
+                                        Layout.alignment:Qt.AlignRight
+                                        width:innerText.width + 48*2
+                                        height:35
+                                        buttonText:qsTranslate("","Change")
+                                        color: "#065AD8"
+                                        borderColor: "#065AD8" 
+                                        textColor: "white"
+                                        fontWeight:600
+                                        fontSize:10
+                                        borderWidth:1
+                                        onClicked:{
+                                        }
+                                    }
                                 }
                             }
                             
@@ -582,10 +682,10 @@ Rectangle{
 
                     }
                     Button_{
-                        Layout.alignment:Qt.AlignLeft
+                        Layout.alignment:Qt.AlignRight
                         width:innerText.width + 48*2
                         height:35
-                        buttonText:qsTranslate("","Submit")
+                        buttonText:qsTranslate("","Submit KYC")
                         color: "#065AD8"
                         borderColor: "#065AD8" 
                         textColor: "white"
@@ -593,6 +693,7 @@ Rectangle{
                         fontSize:10
                         borderWidth:1
                         onClicked:{
+                            toastmanager.show(true,"KYC profile Update : ","Your Changes are Submitted successfuly !")
                         }
                     }
                 }
