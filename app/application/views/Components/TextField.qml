@@ -36,13 +36,13 @@ TextField {
     rightPadding:showPassIcon ? 38:0
     placeholderText: textField.placeholder
     font.pointSize: 9
-    color: "#121B28"
+    color: "#065AD8"
     background: Rectangle {
         id:innerRect
         // anchors.fill:parent
         color: textField.bg_enabled ? internal.dynamicColor : Qt.rgba(100/255,100/255,100/255,0.4)
         radius: textField.bgRadius
-        border.color:textField.focus ? "#121B28":text!=="" ? "#121B28":"#AEAFB3"
+        border.color:textField.focus ? "#065AD8":text!=="" ? "#065AD8":"#AEAFB3"
         border.width:1
 
     }

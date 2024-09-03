@@ -27,7 +27,7 @@ class MainApp(QObject):
         self.engine.rootContext().setContextProperty('baseDir',os.getcwd().replace("\\", "/"))
         # print(os.getcwd().replace("\\", "/"))
         
-        self.goToApp()
+        self.goToAuth()
         
         
         self.engine.load(Path(__file__).resolve().parent / "main.qml")

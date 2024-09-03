@@ -15,6 +15,7 @@ from argparse import ArgumentParser, RawTextHelpFormatter
 from .res.images.ImageProvider import ImageProvider
 
 from .api.Logout import Logout
+from .api.Get_KYC import Get_KYC
 
 class AppWindow(QObject):
     
@@ -23,6 +24,7 @@ class AppWindow(QObject):
         
         
         self.logout=Logout(main_app)
+        self.get_kyc=Get_KYC(main_app)
         
         # essentials
         main_app.window = self

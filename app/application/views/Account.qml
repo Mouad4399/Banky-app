@@ -17,6 +17,27 @@ Rectangle{
     objectName:"Account"
     color:"#eff1fc"
 
+
+    Component.onCompleted:{
+        window.getAttr('get_kyc').sendRequest()
+        busypopup.open()
+        window.getAttr('get_kyc').finished.connect(function (code,json) {
+                                        busypopup.close();
+                                        if (code === 200) {
+                                            // main_app.goToApp();
+                                            // console.log('login successful')
+                                            toastmanager.show(true,"Receive KYC Data :" , "Your Data have been received successfuly !")
+                                        }else{
+                                            // console.log(code)
+                                            var auth_error_message = json.detail;
+                                            console.log(auth_error_message)
+                                            toastmanager.show(false,"Receive KYC Data :" , "There was an Error While getting your KYC data !")
+                                        }
+                                        
+                                    });
+        
+    }
+
     Rectangle{
         width:parent.width
         height:190
@@ -58,7 +79,7 @@ Rectangle{
                 ColorImage {
                     id: user_image
                     Layout.alignment:Qt.AlignHCenter|Qt.AlignTop
-                    source: 'http://localhost:8000/user/kyc/file/identity_image?token=b8c04399b638cad5a07ba5fd4d05e58f4609aa77'
+                    source: 'http://localhost:8000/user/kyc/file/identity_image?token='+user_info.token
                     Layout.preferredWidth:parent.width * 45/100
                     Layout.preferredHeight:width
                     layer.enabled:true
@@ -72,7 +93,7 @@ Rectangle{
                     }
                 }
                 Text {
-                    text: "Mouad Ait Ougrram"
+                    text: user_kyc_info.full_name
                     Layout.alignment:Qt.AlignHCenter|Qt.AlignTop
                     horizontalAlignment: Text.AlignLeft
                     wrapMode: Text.WordWrap
@@ -219,7 +240,7 @@ Rectangle{
                                 ColorImage {
                                     id: user_image_edit
                                     // Layout.alignment:Qt.AlignHCenter|Qt.AlignTop
-                                    source: 'http://localhost:8000/user/kyc/file/identity_image?token=b8c04399b638cad5a07ba5fd4d05e58f4609aa77'
+                                    source: 'http://localhost:8000/user/kyc/file/image?token='+user_info.token
                                     Layout.preferredWidth:70
                                     Layout.preferredHeight:width
                                     layer.enabled:true
@@ -236,7 +257,7 @@ Rectangle{
                                     Layout.alignment:Qt.AlignCenter
                                     Text {
                                         Layout.alignment:Qt.AlignLeft
-                                        text: "Mouad Ait Ougrram"
+                                        text: user_kyc_info.full_name
                                         horizontalAlignment: Text.AlignLeft
                                         font.family: Fonts.inter
                                         wrapMode: Text.WordWrap
@@ -246,7 +267,7 @@ Rectangle{
                                     }
                                     Text {
                                         Layout.alignment:Qt.AlignLeft
-                                        text: "mouad@user.com"
+                                        text: user_info.email
                                         horizontalAlignment: Text.AlignLeft
                                         font.family: Fonts.inter
                                         wrapMode: Text.WordWrap
@@ -288,13 +309,14 @@ Rectangle{
                         columns: 2
 
                         Repeater{
-                            model:3
+                            model:['full_name','country','city']
                             delegate:TextField_ {
                                 Layout.column:0
                                 Layout.row:2*index +1
                                 Layout.fillWidth: true
                                 // Layout.fillHeight: true
                                 // implicitHeight: 45
+                                text:user_kyc_info[modelData]
                                 placeholder: ""
                                 bgRadius: 8
                                 onTextChanged:{
@@ -302,13 +324,14 @@ Rectangle{
                             }
                         }
                         Repeater{
-                            model:3
+                            model:['mobile','state','fax']
                             delegate:TextField_ {
                                 Layout.column:1
                                 Layout.row:2*index +1
                                 Layout.fillWidth: true
                                 // Layout.fillHeight: true
                                 // implicitHeight: 45
+                                text:user_kyc_info[modelData]
                                 placeholder: ""
                                 bgRadius: 8
                                 onTextChanged:{
@@ -569,7 +592,7 @@ Rectangle{
                                 ColorImage {
                                     id: identity_image
                                     // Layout.alignment:Qt.AlignHCenter|Qt.AlignTop
-                                    source: 'http://localhost:8000/user/kyc/file/identity_image?token=b8c04399b638cad5a07ba5fd4d05e58f4609aa77'
+                                    source: 'http://localhost:8000/user/kyc/file/identity_image?token='+user_info.token
                                     Layout.fillWidth:true
                                     Layout.fillHeight:true
                                     // Layout.preferredWidth:parent.width * 45/100
@@ -630,7 +653,7 @@ Rectangle{
                                 ColorImage {
                                     id: signature_image
                                     // Layout.alignment:Qt.AlignHCenter|Qt.AlignTop
-                                    source: 'http://localhost:8000/user/kyc/file/identity_image?token=b8c04399b638cad5a07ba5fd4d05e58f4609aa77'
+                                    source: 'http://localhost:8000/user/kyc/file/identity_image?token='+user_info.token
                                     Layout.fillWidth:true
                                     Layout.fillHeight:true
                                     // Layout.preferredWidth:parent.width * 45/100

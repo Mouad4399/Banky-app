@@ -31,7 +31,7 @@ ApplicationWindow {
                                     main_app.goToAuth();
                                     console.log('logout successful')
                                 }else{
-                                    toastmanager.show(false , "Authentication Error",json.detail+" : Or You are not Authorized to do this Action !")
+                                    toastmanager.show(false , "Authentication Error",json.detail+" : \nOr You are not Authorized to do this Action !")
                                     var auth_error_message = json.detail;
                                     console.log(auth_error_message)
                                 }

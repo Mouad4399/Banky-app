@@ -6,33 +6,28 @@ import time
 import requests
 import json
 
-class Authenticate(QThread):
+class Get_KYC(QThread):
     finished = Signal(int,dict)
     
     def __init__(self,main_app:QObject):
         QThread.__init__(self)
         self.main_app=main_app
         
-    @Slot(dict)
-    def sendRequest(self,data:dict):
-        self.data= data
-        
+    @Slot()
+    def sendRequest(self):
         self.start()
         
     
     def run(self):
         try:
-            response=requests.post("http://127.0.0.1:8000/user/login/",data=self.data)
+            response=requests.get("http://127.0.0.1:8000/user/kyc/",headers={'Authorization': f'Token {self.main_app.user_info.get("token")}'})
 
             if response:
-                self.main_app.user_info=response.json()
-                # username is the email in this case
-                self.main_app.user_info['email']=self.data.get('username')
-                print(self.main_app.user_info)
+                self.main_app.user_kyc_info=response.json()
+                print(self.main_app.user_kyc_info)
                 
-                self.main_app.engine.rootContext().setContextProperty('user_info',self.main_app.user_info)        
+                self.main_app.engine.rootContext().setContextProperty('user_kyc_info',self.main_app.user_kyc_info)        
                 
-                # self.main_app.engine.rootContext().setContextProperty('user_profile_info',self.main_app.user_profile_info)        
                 
                 self.finished.emit(response.status_code,response.json())
             else:
@@ -42,4 +37,5 @@ class Authenticate(QThread):
         except:
             self.finished.emit(404,{'detail':'HOST_NOT_RESPONDING'})
             return
+    
     
