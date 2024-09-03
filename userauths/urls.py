@@ -11,4 +11,5 @@ urlpatterns=[
     path('test/',views.test , name='test'),
     path('kyc/',views.kyc_registration , name='kyc'),
     path('kyc/file/<str:file>', views.get_file, name='get-file'),
+    path('acc/', views.get_account, name='get-acc'),
 ]

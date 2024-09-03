@@ -86,11 +86,17 @@ def kyc_registration(request):
     if request.method == 'POST':
         user= request.user.id
         account= Account.objects.get(user=user).id
-        
-        print(request.data)
-        request.data['user']=user
-        request.data['account']=account
-        serializer = KYCSerializer(data=request.data)
+        try:
+            user_kyc =KYC.objects.get(user=request.user.id)
+            # kyc exists
+            serializer = KYCSerializer(user_kyc, data=request.data, partial=True)  # Set partial=True for partial updates
+            
+        except KYC.DoesNotExist:
+            print(request.data)
+            request.data['user']=user
+            request.data['account']=account
+            serializer = KYCSerializer(data=request.data)
+            
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -104,6 +110,20 @@ def kyc_registration(request):
         
         serializer = KYCSerializer(user_kyc)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+from account.models import Account
+from .serializers import AccountSerializer
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_account(request):
+    if request.method == 'GET':
+        try:
+            user_acc =Account.objects.get(user=request.user.id)
+        except Account.DoesNotExist:
+            return Response({'detail': 'Account record not found.'}, status=status.HTTP_404_NOT_FOUND)
+        
+        serializer = AccountSerializer(user_acc)
+        return Response(serializer.data, status=status.HTTP_200_OK)
        
 import os    
 from django.http import FileResponse,Http404,HttpResponseForbidden,HttpResponse,JsonResponse
@@ -111,21 +131,30 @@ from django.conf import settings
 # @permission_classes([IsAuthenticated])
 def get_file(request,file):
     token_key = request.GET.get('token')
-
+    # try to replace the jsonResponse with a default image with text = N/A to make all things work
+    default_image=os.path.join(settings.BASE_DIR, 'media/NA.png')
     if token_key:
         try:
             token = Token.objects.get(key=token_key)
             user= token.user_id
-            user_kyc =KYC.objects.get(user=user)
+            try:
+                user_kyc =KYC.objects.get(user=user)
+            except KYC.DoesNotExist:
+                return FileResponse(open(default_image, 'rb'))
+            
             data = KYCSerializer(KYC.objects.get(pk=user_kyc.id)).data
+            
             data_relative_path = data.get(file)
+            
             if not data_relative_path :
-                return JsonResponse({'detail': "data does not exist"})
+                return FileResponse(open(default_image, 'rb'))
+            
             file_path = os.path.join(settings.BASE_DIR, data_relative_path[1:])
+            
             if os.path.exists(file_path):
                 return FileResponse(open(file_path, 'rb'))
             else:
-                raise JsonResponse({'detail': "data does not exist"})
+                return FileResponse(open(default_image, 'rb'))
         except Token.DoesNotExist:
             return JsonResponse({'detail': "invalid token"})
 
