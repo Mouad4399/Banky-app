@@ -111,15 +111,6 @@ Rectangle{
             }
         }
     }
-    Popup {
-        id: busypopup
-        anchors.centerIn: Overlay.overlay
-        closePolicy: Popup.NoAutoClose
-        modal: true
 
-        BusyIndicator {
-            running: true
-        }
-    }
 
 }

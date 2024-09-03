@@ -18,23 +18,25 @@ Rectangle{
     color:"#eff1fc"
 
 
+    function get_kyc_slot(code,json) {
+        busypopup.close()
+        if (code === 200) {
+            // main_app.goToApp();
+            // console.log('login successful')
+            toastmanager.show(true,"Receive KYC Data :" , "Your Data have been received successfuly !")
+        }else{
+            // console.log(code)
+            var auth_error_message = json.detail;
+            console.log(auth_error_message)
+            toastmanager.show(false,"Receive KYC Data :" , "There was an Error While getting your KYC data !")
+        }
+        window.getAttr('get_kyc').finished.disconnect(get_kyc_slot)
+        
+    }
     Component.onCompleted:{
+        busypopup.open()                                           
         window.getAttr('get_kyc').sendRequest()
-        busypopup.open()
-        window.getAttr('get_kyc').finished.connect(function (code,json) {
-                                        busypopup.close();
-                                        if (code === 200) {
-                                            // main_app.goToApp();
-                                            // console.log('login successful')
-                                            toastmanager.show(true,"Receive KYC Data :" , "Your Data have been received successfuly !")
-                                        }else{
-                                            // console.log(code)
-                                            var auth_error_message = json.detail;
-                                            console.log(auth_error_message)
-                                            toastmanager.show(false,"Receive KYC Data :" , "There was an Error While getting your KYC data !")
-                                        }
-                                        
-                                    });
+        window.getAttr('get_kyc').finished.connect(get_kyc_slot);
         
     }
 
@@ -76,21 +78,12 @@ Rectangle{
                 anchors.margins:15
                 spacing:10
 
-                ColorImage {
-                    id: user_image
+                RImage_ {
                     Layout.alignment:Qt.AlignHCenter|Qt.AlignTop
-                    source: 'http://localhost:8000/user/kyc/file/identity_image?token='+user_info.token
+                    source: 'http://localhost:8000/user/kyc/file/image?token='+user_info.token
                     Layout.preferredWidth:parent.width * 45/100
                     Layout.preferredHeight:width
-                    layer.enabled:true
-                    layer.effect:OpacityMask {
-                        maskSource: Rectangle {
-                            width: user_image.width
-                            height: user_image.height
-                            radius: width/2
-                            // visible: false // this also needs to be invisible or it will cover up the image
-                        }
-                    }
+                    radius:width/2
                 }
                 Text {
                     text: user_kyc_info.full_name
@@ -653,7 +646,7 @@ Rectangle{
                                 ColorImage {
                                     id: signature_image
                                     // Layout.alignment:Qt.AlignHCenter|Qt.AlignTop
-                                    source: 'http://localhost:8000/user/kyc/file/identity_image?token='+user_info.token
+                                    source: 'http://localhost:8000/user/kyc/file/signature?token='+user_info.token
                                     Layout.fillWidth:true
                                     Layout.fillHeight:true
                                     // Layout.preferredWidth:parent.width * 45/100
@@ -735,16 +728,4 @@ Rectangle{
             }
         }
     }
-
-    Popup {
-        id: busypopup
-        anchors.centerIn: Overlay.overlay
-        closePolicy: Popup.NoAutoClose
-        modal: true
-
-        BusyIndicator {
-            running: true
-        }
-    }
-
 }

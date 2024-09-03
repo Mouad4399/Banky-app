@@ -9,3 +9,4 @@ RowButton_ 1.0 RowButton.qml
 
 ComboBox_ 1.0 ComboBox.qml
 EmptyField_ 1.0 EmptyField.qml
+RImage_ 1.0 RImage.qml
