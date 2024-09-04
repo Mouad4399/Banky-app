@@ -83,7 +83,7 @@ ApplicationWindow {
                     imageSource:'data:image/svg+xml;utf8,<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M2.52 7.823C2 8.77 2 9.915 2 12.203V13.725C2 17.625 2 19.576 3.172 20.788C4.344 22 6.229 22 10 22H14C17.771 22 19.657 22 20.828 20.788C21.999 19.576 22 17.626 22 13.725V12.204C22 9.915 22 8.771 21.48 7.823C20.962 6.874 20.013 6.286 18.116 5.108L16.116 3.867C14.111 2.622 13.108 2 12 2C10.892 2 9.89 2.622 7.884 3.867L5.884 5.108C3.987 6.286 3.039 6.874 2.52 7.823ZM11.25 18C11.25 18.1989 11.329 18.3897 11.4697 18.5303C11.6103 18.671 11.8011 18.75 12 18.75C12.1989 18.75 12.3897 18.671 12.5303 18.5303C12.671 18.3897 12.75 18.1989 12.75 18V15C12.75 14.8011 12.671 14.6103 12.5303 14.4697C12.3897 14.329 12.1989 14.25 12 14.25C11.8011 14.25 11.6103 14.329 11.4697 14.4697C11.329 14.6103 11.25 14.8011 11.25 15V18Z" fill="#B0B4B8"/></svg>'
                     imageSize.height:height/2
                     buttonText:'Dashboard'
-                    checked:true
+                    // checked:true
                     fontSize:11
                     checkable:true
                     autoExclusive: true
@@ -95,10 +95,10 @@ ApplicationWindow {
                     content.anchors.leftMargin:10
                     content.anchors.verticalCenter:content.parent.verticalCenter
                     content.spacing: 15
+                    checked:stack.currentItem.objectName===buttonText
                     onClicked:{
-                        checked=true
                         if (stack.currentItem.objectName!=buttonText){
-                            stack.replace('./views/'+buttonText+'.qml')
+                            stack.replaceIfReady('./views/'+buttonText+'.qml')
                         }
                     }
 
@@ -128,10 +128,10 @@ ApplicationWindow {
                     content.anchors.leftMargin:10
                     content.anchors.verticalCenter:content.parent.verticalCenter
                     content.spacing: 15
+                    checked:stack.currentItem.objectName===buttonText
                     onClicked:{
-                        checked=true
                         if (stack.currentItem.objectName!=buttonText){
-                            stack.replace('./views/'+buttonText+'.qml')
+                            stack.replaceIfReady('./views/'+buttonText+'.qml')
                         }
                     }
 
@@ -156,10 +156,10 @@ ApplicationWindow {
                     content.anchors.leftMargin:10
                     content.anchors.verticalCenter:content.parent.verticalCenter
                     content.spacing: 15
+                    checked:stack.currentItem.objectName===buttonText
                     onClicked:{
-                        checked=true
                         if (stack.currentItem.objectName!=buttonText){
-                            stack.replace('./views/'+buttonText+'.qml')
+                            stack.replaceIfReady('./views/'+buttonText+'.qml')
                         }
                     }
 
@@ -184,10 +184,10 @@ ApplicationWindow {
                     content.anchors.leftMargin:10
                     content.anchors.verticalCenter:content.parent.verticalCenter
                     content.spacing: 15
+                    checked:stack.currentItem.objectName===buttonText
                     onClicked:{
-                        checked=true
                         if (stack.currentItem.objectName!=buttonText){
-                            stack.replace('./views/'+buttonText+'.qml')
+                            stack.replaceIfReady('./views/'+buttonText+'.qml')
                         }
                     }
 
@@ -212,10 +212,10 @@ ApplicationWindow {
                     content.anchors.leftMargin:10
                     content.anchors.verticalCenter:content.parent.verticalCenter
                     content.spacing: 15
+                    checked:stack.currentItem.objectName===buttonText
                     onClicked:{
-                        checked=true
                         if (stack.currentItem.objectName!=buttonText){
-                            stack.replace('./views/'+buttonText+'.qml')
+                            stack.replaceIfReady('./views/'+buttonText+'.qml')
                         }
                     }
 
@@ -240,10 +240,10 @@ ApplicationWindow {
                     content.anchors.leftMargin:10
                     content.anchors.verticalCenter:content.parent.verticalCenter
                     content.spacing: 15
+                    checked:stack.currentItem.objectName===buttonText
                     onClicked:{
-                        checked=true
                         if (stack.currentItem.objectName!=buttonText){
-                            stack.replace('./views/'+buttonText+'.qml')
+                            stack.replaceIfReady('./views/'+buttonText+'.qml')
                         }
                     }
                 }
@@ -271,11 +271,10 @@ ApplicationWindow {
                     content.anchors.leftMargin:10
                     content.anchors.verticalCenter:content.parent.verticalCenter
                     content.spacing: 15
+                    checked:stack.currentItem.objectName===buttonText
                     onClicked:{
-                        checked=true
                         if (stack.currentItem.objectName!=buttonText){
-                            stack.replace('./views/'+buttonText+'.qml')
-                            stack.replaceIfReady()
+                            stack.replaceIfReady('./views/'+buttonText+'.qml')
                         }
                         
                     }
@@ -302,8 +301,8 @@ ApplicationWindow {
                     content.anchors.verticalCenter:content.parent.verticalCenter
                     content.spacing: 15
                     onClicked:{
-                        checked=true
 
+                            checked=true
                         window.getAttr('logout').sendRequest();
                         busypopup.open();
                         
@@ -326,10 +325,18 @@ ApplicationWindow {
             anchors.fill: parent
             clip: true
             initialItem: "./views/Dashboard.qml"
-
-            function replaceIfReady(){
-                // currentItem.color="red"
-                // currentItem.notReadyToLeavePopup.popup()
+            
+            function replaceIfReady(path){
+                if(currentItem.isReadyToLeave()){
+                    stack.replace(path);
+                    return ;
+                }
+                currentItem.notReadyToLeavePopup.accepted.connect(function replaceReady(){
+                                                                        stack.replace(path)
+                                                                        // currentItem.notReadyToLeavePopup.accepted.disconnect(replaceReady)
+                                                                    });
+                currentItem.notReadyToLeavePopup.open()
+                return ;
             }
             ToastManager {
                 id: toastmanager

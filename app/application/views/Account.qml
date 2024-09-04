@@ -17,9 +17,210 @@ Rectangle{
     objectName:"Account"
     color:"#eff1fc"
 
-    property bool isReadyToLeave:Object.keys(updated_kyc).length ===1
-
+    function isReadyToLeave(){
+        
+        return Object.keys(updated_kyc).length ===1
     
+    }
+
+    property Dialog notReadyToLeavePopup:dialog
+
+    Dialog {
+        id: dialog
+        // standardButtons: DialogButtonBox.Ok
+        // anchors.centerIn:parentId
+        // anchors.centerIn:parent
+        // property var parentId
+        width: contentDialog.implicitWidth
+        height: contentDialog.implicitHeight
+        padding: 0
+        x: parent.width / 2 - width / 2
+        y: parent.height / 2 - height / 2
+
+        // property string imageToSend:''
+        // property string audioToSend:''
+
+        onAccepted:
+        {
+        }
+
+        onClosed: {
+        }
+
+        // topPadding: 0
+
+        enter: Transition {
+            // grow_fade_in
+            NumberAnimation {
+                property: "scale"
+                from: 0.9
+                to: 1.0
+                easing.type: Easing.OutQuint
+                duration: 220
+            }
+            NumberAnimation {
+                property: "opacity"
+                from: 0.0
+                to: 1.0
+                easing.type: Easing.OutCubic
+                duration: 150
+            }
+        }
+
+        exit: Transition {
+            // shrink_fade_out
+            NumberAnimation {
+                property: "scale"
+                from: 1.0
+                to: 0.9
+                easing.type: Easing.OutQuint
+                duration: 220
+            }
+            NumberAnimation {
+                property: "opacity"
+                from: 1.0
+                to: 0.0
+                easing.type: Easing.OutCubic
+                duration: 150
+            }
+        }
+
+        modal: true
+
+        background: Rectangle {
+            anchors.fill: parent
+            // color:"red"
+            radius: 12
+        }
+        contentItem:Rectangle {
+            // anchors.fill: parent
+            id: contentDialog
+            default property alias data: col.data
+            implicitWidth: col.width + 40
+            implicitHeight: col.height+40
+            radius: 12
+            // color: "white"
+            color: Qt.rgba(0,0,0,0)
+
+            ColumnLayout {
+                id: col
+                // width: 420
+                width:460
+                anchors.centerIn: parent
+                // anchors.horizontalCenter:parent.horizontalCenter
+
+                spacing: 15
+
+                ColorImage {
+                    id: closebtn
+                    Layout.alignment: Qt.AlignRight | Qt.AlignTop
+                    source: "image://img/close_icon.svg"
+                    sourceSize.width:18
+                    color: 'black'
+                    Rectangle {
+                        // id:closebtn_rect
+                        anchors.centerIn: parent
+                        width: parent.width + 4
+                        height: width
+                        color: Qt.rgba(0, 0, 0, 0)
+                        radius: width / 2
+                        z: -1
+
+                        MouseArea {
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            onEntered: {
+                                parent.border.color = "#065AD8";
+                            }
+                            onExited: {
+                                parent.border.color = Qt.rgba(0, 0, 0, 0);
+                            }
+                            onClicked: {
+                                dialog.close();
+                            }
+                        }
+                    }
+                }
+                // Item {
+                //     Layout.fillWidth: true
+                //     Layout.fillHeight: true
+                // }
+
+                ColumnLayout {
+                    // Layout.fillWidth: true
+                    Layout.alignment: Qt.AlignLeft
+                    spacing: 25
+                    Text {
+                        Layout.fillWidth: true
+                        Layout.alignment: Qt.AlignLeft
+                        text: qsTranslate('',"Discard Changes ?")
+                        horizontalAlignment: Text.AlignLeft
+                        wrapMode: Text.WordWrap
+                        font.family: Fonts.inter
+                        font.pointSize: 17
+                        font.weight: 900
+                        color: "black"
+                    }
+                    Text {
+                        Layout.alignment: Qt.AlignLeft
+                        Layout.maximumWidth:parent.parent.width -40
+                        text: qsTranslate('',"You are about to leave without saving changes to your KYC information , do you want to Discard them ? ")
+                        horizontalAlignment: Text.AlignLeft
+                        wrapMode: Text.WordWrap
+                        font.family: Fonts.inter
+                        font.pointSize: 11
+                        font.weight: 600
+                        color: "#787878"
+                    }
+                    
+                }
+                RowLayout{
+                    // Layout.fillWidth:true
+                    Layout.alignment: Qt.AlignRight
+                    Layout.topMargin:15
+                    spacing: 15
+                    Item{
+                        Layout.fillWidth:true
+                    }
+                    Button_ {
+                        // Layout.alignment: Qt.AlignCenter
+                        // Layout.fillWidth:true
+                        // implicitWidth: 140
+                        width:innerText.width + 16*2
+                        height:35
+                        // width:Layout.preferredWidth
+                        // height: 45
+                        buttonText: qsTranslate('',"Stay In")
+                        textColor:'#121B28'
+                        fontWeight: 700
+                        fontSize:11
+                        color:'white'
+                        borderWidth:1
+                        borderColor:'#121B28'
+                        onClicked: {
+                            dialog.reject();
+                        }
+                    }
+                    Button_ {
+                        // Layout.alignment: Qt.AlignCenter
+                        // Layout.fillWidth:true
+                        // width:Layout.preferredWidth
+                        // height: 45
+                        width:innerText.width + 16*2
+                        height:35
+                        buttonText: qsTranslate('',"Discard and Leave")
+                        fontSize:11
+                        fontWeight: 700
+                        color:"#d32f2f"
+                        onClicked: {
+                            dialog.accept();
+                        }
+                    }
+                }
+            }
+        }
+
+    }
 
     property variant user_kyc_form:{'id': '', 'full_name': '', 'image': '', 'marrital_status': '', 'gender': '', 'identity_type': '', 'identity_image': '', 'date_of_birth': '', 'signature': '', 'country': '', 'state': '', 'city': '', 'mobile': '', 'fax': '', 'date': '', 'user':'' , 'account': ''}
     property variant user_acc_form:{'id': '', 'account_balance': '', 'account_number': '', 'account_id': '', 'pin_number': '', 'red_code': '', 'account_status': '', 'date': '', 'kyc_submitted': '', 'kyc_confirmed': '', 'review': '', 'user': '', 'recommended_by': ''}
@@ -80,6 +281,8 @@ Rectangle{
 
         // one you write the Update_KYC and set up everything
         window.getAttr('update_kyc').finished.connect(update_kyc_slot);
+
+
         
         
     }
@@ -329,7 +532,7 @@ Rectangle{
                                 ColorImage {
                                     id: user_image_edit
                                     // Layout.alignment:Qt.AlignHCenter|Qt.AlignTop
-                                    source: 'http://localhost:8000/user/kyc/file/identity_image?token='+user_info.token
+                                    source: 'http://localhost:8000/user/kyc/file/image?token='+user_info.token
                                     Layout.preferredWidth:70
                                     Layout.preferredHeight:width
                                     layer.enabled:true
@@ -381,6 +584,8 @@ Rectangle{
                                 fontSize:10
                                 borderWidth:1
                                 onClicked:{
+                                    fileOpen.field_name='image'
+                                    fileOpen.open()
                                 }
                             }
                         }
@@ -794,7 +999,8 @@ Rectangle{
                 identity_image.source='file:'+String(fileOpen.currentFile).substr(8)
             }else if(field_name === 'signature_image'){
                 signature_image.source='file:'+String(fileOpen.currentFile).substr(8)
-
+            }else if(field_name === 'image'){
+                user_image_edit.source='file:'+String(fileOpen.currentFile).substr(8)
             }
         }
     }

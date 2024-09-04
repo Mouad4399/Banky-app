@@ -14,6 +14,12 @@ Rectangle{
     height:parent===null ? height:parent.height
     objectName:"Dashboard"
     color:"#F5F5F5"
+    function isReadyToLeave(){
+        
+        return true
+    
+    }
+
 
     ColumnLayout {
         anchors.fill: parent
