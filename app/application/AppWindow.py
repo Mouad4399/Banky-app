@@ -17,6 +17,7 @@ from .res.images.ImageProvider import ImageProvider
 from .api.Logout import Logout
 from .api.Get_KYC import Get_KYC
 from .api.Get_Acc import Get_Acc
+from .api.Update_KYC import Update_KYC
 
 class AppWindow(QObject):
     
@@ -27,6 +28,7 @@ class AppWindow(QObject):
         self.logout=Logout(main_app)
         self.get_kyc=Get_KYC(main_app)
         self.get_acc=Get_Acc(main_app)
+        self.update_kyc=Update_KYC(main_app)
         
         # essentials
         main_app.window = self

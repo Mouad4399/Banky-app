@@ -17,6 +17,8 @@ Rectangle{
     objectName:"Account"
     color:"#eff1fc"
 
+    property bool isReadyToLeave:Object.keys(updated_kyc).length ===1
+
     
 
     property variant user_kyc_form:{'id': '', 'full_name': '', 'image': '', 'marrital_status': '', 'gender': '', 'identity_type': '', 'identity_image': '', 'date_of_birth': '', 'signature': '', 'country': '', 'state': '', 'city': '', 'mobile': '', 'fax': '', 'date': '', 'user':'' , 'account': ''}
@@ -29,7 +31,7 @@ Rectangle{
         if (code === 200) {
             // main_app.goToApp();
             // console.log('login successful')
-            toastmanager.show(true,"Receive KYC Data :" , "Your Data have been received successfuly !")
+            // toastmanager.show(true,"Receive KYC Data :" , "Your Data have been received successfuly !")
         }else if (code=== 404 && json.detail !==undefined){
             // user_kyc_form ={'id': '', 'full_name': '', 'image': '', 'marrital_status': '', 'gender': '', 'identity_type': '', 'identity_image': '', 'date_of_birth': '', 'signature': '', 'country': '', 'state': '', 'city': '', 'mobile': '', 'fax': '', 'date': '', 'user':'' , 'account': ''}
             toastmanager.show(false,"Receive KYC Data :" , "Your havn't set up your KYC information !")
@@ -46,7 +48,7 @@ Rectangle{
     }
     function update_kyc_slot(code,json) {
         busypopup.close()
-        if (code === 200) {
+        if (code === 201) {
             // main_app.goToApp();
             // console.log('login successful')
             toastmanager.show(true,"Update KYC Data :" , "Your Data have been updated successfuly !")
@@ -54,11 +56,14 @@ Rectangle{
             // console.log(code)
             var auth_error_message = json.detail;
             console.log(auth_error_message)
-            toastmanager.show(false,"Receive KYC Data :" , "There was an Error While updating your KYC data !")
+            toastmanager.show(false,"Update KYC Data :" , "There was an Error While updating your KYC data !")
         }
 
-        // user_kyc_form=user_kyc_info
+        
+        // reset updated_kyc
+        updated_kyc={'dummyKey':''};
         window.getAttr('update_kyc').finished.disconnect(update_kyc_slot)
+        stack.replace("./Account.qml");
         
     }
     function get_acc_slot(code , json){
@@ -74,7 +79,7 @@ Rectangle{
         window.getAttr('get_kyc').sendRequest()
 
         // one you write the Update_KYC and set up everything
-        // window.getAttr('update_kyc').finished.connect(update_kyc_slot);
+        window.getAttr('update_kyc').finished.connect(update_kyc_slot);
         
         
     }
@@ -481,29 +486,18 @@ Rectangle{
                             Layout.fillWidth: true
                             // Layout.fillHeight: true
                             // implicitHeight: 45
-                            placeholder: "1999-1-1"
+                            text: Qt.formatDateTime(new Date(user_kyc_form.date_of_birth),"yyyy-MM-dd")
+                            placeholder:"yyyy-MM-dd"
                             bgRadius: 8
                             onTextEdited:{
-                                if(text=== user_kyc_form[modelData]){
-                                        delete updated_kyc[modelData];
+                                if(text=== Qt.formatDateTime(new Date(user_kyc_form.date_of_birth),"yyyy-MM-dd")){
+                                        delete updated_kyc.date;
                                         return
                                     }else{
-                                        updated_kyc[modelData]=text
+                                        updated_kyc.date=text
                                     }
                             }
                         }
-                        // Text {
-                        //     Layout.columnSpan:2
-                        //     Layout.column:0
-                        //     Layout.row:2*4
-                        //     text: qsTr("Gender")
-                        //     horizontalAlignment: Text.AlignLeft
-                        //     wrapMode: Text.WordWrap
-                        //     font.family: Fonts.inter
-                        //     font.pointSize: 10
-                        //     font.weight: 600
-                        //     color: "#444"
-                        // }
                         GridLayout{
                             Layout.columnSpan:2
                             Layout.column:0
@@ -546,12 +540,20 @@ Rectangle{
                                 placeholderText:""
                                 model: ['----','Male', 'Female','Not expose']
                                 property var choices:{'':0 , 'male':1,'female':2,'other':3}
+                                property var indexchoices:['' , 'male','female','other']
                                 currentIndex:choices[user_kyc_form.gender]
                                 onActivated:index=>{
                                     if(index===0){
                                         return
                                     }
-                                    user_kyc_form.gender=choices[index]
+                                    var text=indexchoices[index]
+
+                                    if(text=== user_kyc_form.gender){
+                                        delete updated_kyc['gender'];
+                                        return
+                                    }else{
+                                        updated_kyc['gender']=text
+                                    }
                                 }
                             }
                             ComboBox_ {
@@ -562,12 +564,20 @@ Rectangle{
                                 placeholderText:""
                                 model: ['----','Single', 'Married','Not expose']
                                 property var choices:{'':0 , 'single':1,'married':2,'other':3}
+                                property var indexchoices:['' , 'single','married','other']
                                 currentIndex:choices[user_kyc_form.marrital_status]
                                 onActivated:index=>{
                                     if(index===0){
                                         return
                                     }
-                                    user_kyc_form.marrital_status=choices[index]
+                                    var text=indexchoices[index]
+
+                                    if(text=== user_kyc_form.marrital_status){
+                                        delete updated_kyc['marrital_status'];
+                                        return
+                                    }else{
+                                        updated_kyc['marrital_status']=text
+                                    }
                                 }
                             }
                             ComboBox_ {
@@ -578,12 +588,21 @@ Rectangle{
                                 placeholderText:""
                                 model: ['----','National ID Card', 'Drives Licence','International Passport']
                                 property var choices:{'':0 , 'national_id_card':1,'drivers_licnece':2,'international_passport':3}
+                                property var indexchoices:['' , 'national_id_card','drivers_licnece','international_passport']
                                 currentIndex:choices[user_kyc_form.identity_type]
                                 onActivated:index=>{
                                     if(index===0){
                                         return
                                     }
-                                    user_kyc_form.identity_type=choices[index]
+                                    var text=indexchoices[index]
+                                    console.log(text)
+
+                                    if(text=== user_kyc_form.identity_type){
+                                        delete updated_kyc['identity_type'];
+                                        return
+                                    }else{
+                                        updated_kyc['identity_type']=text
+                                    }
                                 }
                             }
                         }
@@ -741,14 +760,10 @@ Rectangle{
                         onClicked:{
                             // remove unccessarely dymmyKey
                             updated_kyc.dummyKey !== undefined ? delete updated_kyc.dummyKey:null
-                            // busypopup.open()
+                            busypopup.open()
                             console.log(JSON.stringify(updated_kyc))
-                            // window.getAttr('update_kyc').sendRequest(updated_kyc)
+                            window.getAttr('update_kyc').sendRequest(updated_kyc)
 
-                            // reset updated_kyc
-                            updated_kyc={'dummyKey':''};
-
-                            stack.replace(root);
                         }
                     }
                 }
@@ -774,7 +789,13 @@ Rectangle{
         property string field_name
         onAccepted: {
             console.log( String(fileOpen.currentFile).substr(8))
-            user_kyc_form[field_name]=String(fileOpen.currentFile).substr(8)
+            updated_kyc[field_name]=String(fileOpen.currentFile).substr(8);
+            if (field_name === 'identity_image'){
+                identity_image.source='file:'+String(fileOpen.currentFile).substr(8)
+            }else if(field_name === 'signature_image'){
+                signature_image.source='file:'+String(fileOpen.currentFile).substr(8)
+
+            }
         }
     }
 }

@@ -275,6 +275,7 @@ ApplicationWindow {
                         checked=true
                         if (stack.currentItem.objectName!=buttonText){
                             stack.replace('./views/'+buttonText+'.qml')
+                            stack.replaceIfReady()
                         }
                         
                     }
@@ -325,6 +326,11 @@ ApplicationWindow {
             anchors.fill: parent
             clip: true
             initialItem: "./views/Dashboard.qml"
+
+            function replaceIfReady(){
+                // currentItem.color="red"
+                // currentItem.notReadyToLeavePopup.popup()
+            }
             ToastManager {
                 id: toastmanager
             }

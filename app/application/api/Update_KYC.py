@@ -16,7 +16,7 @@ class Update_KYC(QThread):
     @Slot(dict)
     def sendRequest(self,data):
         self.data= data
-        
+        self.files={}
         for i in ['image','identity_image','signature']:
             if self.data.get(i):
                 self.files[i]=open(self.data.get(i), mode='rb')
