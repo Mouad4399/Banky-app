@@ -220,6 +220,11 @@ Rectangle {
                     anchors.centerIn:parent
                     closePolicy: Popup.NoAutoClose
                     modal: true
+                    background: Rectangle {
+                        anchors.fill: parent
+                        // color:"red"
+                        radius: 12
+                    }
 
                     BusyIndicator {
                         running: true

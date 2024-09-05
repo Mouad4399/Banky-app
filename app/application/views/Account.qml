@@ -272,7 +272,7 @@ Rectangle{
         window.getAttr('get_acc').finished.disconnect(get_acc_slot)
     }
     Component.onCompleted:{
-        // busypopup.open()
+        busypopup.open()
         window.getAttr('get_acc').finished.connect(get_acc_slot);
         window.getAttr('get_acc').sendRequest()
 

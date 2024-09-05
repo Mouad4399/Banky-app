@@ -4,6 +4,7 @@ import QtQuick.Layouts
 import QtWebSockets
 import Fonts 1.0
 import Components 1.0
+import Qt5Compat.GraphicalEffects
 
 import './views/TM'
 
@@ -434,9 +435,15 @@ ApplicationWindow {
         anchors.centerIn:parent
         closePolicy: Popup.NoAutoClose
         modal: true
+        background: Rectangle {
+            anchors.fill: parent
+            // color:"red"
+            radius: 12
+        }
 
         BusyIndicator {
             running: true
         }
     }
+        
 }

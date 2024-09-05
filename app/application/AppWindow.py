@@ -18,6 +18,7 @@ from .api.Logout import Logout
 from .api.Get_KYC import Get_KYC
 from .api.Get_Acc import Get_Acc
 from .api.Update_KYC import Update_KYC
+from .api.Search_Acc import Search_Acc
 
 class AppWindow(QObject):
     
@@ -29,6 +30,7 @@ class AppWindow(QObject):
         self.get_kyc=Get_KYC(main_app)
         self.get_acc=Get_Acc(main_app)
         self.update_kyc=Update_KYC(main_app)
+        self.search_acc=Search_Acc(main_app)
         
         # essentials
         main_app.window = self
