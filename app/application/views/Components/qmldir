@@ -13,3 +13,5 @@ RImage_ 1.0 RImage.qml
 
 Menu_ 1.0 Menu.qml
 MenuItem_ 1.0 MenuItem.qml
+
+CheckBox_ 1.0 CheckBox.qml

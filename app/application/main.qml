@@ -23,9 +23,13 @@ ApplicationWindow {
     title: "Banky"
 
 
-
+    
     Component.onCompleted:{
         // if your repeate this it will do the multiple connect function at the same time
+        window.getAttr('get_acc').finished.connect(function get_acc_slot(code , json){
+            window.getAttr('get_acc').finished.disconnect(get_acc_slot)
+        });
+        window.getAttr('get_acc').sendRequest()
         window.getAttr('logout').finished.connect(function (code,json) {
                                 busypopup.close();
                                 if (code === 200) {

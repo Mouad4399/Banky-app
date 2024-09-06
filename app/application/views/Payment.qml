@@ -19,7 +19,7 @@ Rectangle{
 
     function isReadyToLeave(){
         
-        return true
+        return (stepsStack.depth<=1)
     
     }
 
@@ -153,7 +153,7 @@ Rectangle{
                     Text {
                         Layout.fillWidth: true
                         Layout.alignment: Qt.AlignLeft
-                        text: qsTranslate('',"Discard Changes ?")
+                        text: qsTranslate('',"Discard Process ?")
                         horizontalAlignment: Text.AlignLeft
                         wrapMode: Text.WordWrap
                         font.family: Fonts.inter
@@ -164,7 +164,7 @@ Rectangle{
                     Text {
                         Layout.alignment: Qt.AlignLeft
                         Layout.maximumWidth:parent.parent.width -40
-                        text: qsTranslate('',"You are about to leave without saving changes to your KYC information , do you want to Discard them ? ")
+                        text: qsTranslate('',"You are about to leave without completing the payment process , do you want to Discard it ? ")
                         horizontalAlignment: Text.AlignLeft
                         wrapMode: Text.WordWrap
                         font.family: Fonts.inter

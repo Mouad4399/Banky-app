@@ -170,7 +170,7 @@ ColumnLayout{
                 font.family: Fonts.inter
                 font.pointSize: 10
                 font.weight: 900
-                color: "#AEAFB3"
+                color: "#444"
                 
             }
             Rectangle {
@@ -202,7 +202,7 @@ ColumnLayout{
                     }
 
                     EmptyField_ {
-                        id:recipient_search_field
+                        id:amount_to_pay_field
                         Layout.fillWidth: true
                         // Layout.fillHeight: true
                         Layout.preferredHeight:parent.height
@@ -210,9 +210,14 @@ ColumnLayout{
                         // implicitWidth: 230
                         // Layout.maximumWidth:300
                         // Layout.minimumWidth:200
+                        validator: DoubleValidator{
+                            notation:DoubleValidator.StandardNotation
+                        }
+                        
                         borderWidth: 0
                         placeholderText: qsTranslate('', 'Insert amount to send ...')
-                        onTextChanged: {
+                        onTextEdited: {
+                            newBalance.new_balance_int = Number(user_acc_info.account_balance)-Number(text)
                         }
                     }
                     // Rectangle {
@@ -238,7 +243,7 @@ ColumnLayout{
                     Layout.fillWidth: true
                     Layout.alignment: Qt.AlignLeft
                     textFormat: Text.RichText
-                    text: "Available Balance : "+ "<b>12,309 $</b>"
+                    text: "Available Balance : "+ "<b>"+ user_acc_info.account_balance+"$</b>"
                     horizontalAlignment: Text.AlignLeft
                     wrapMode: Text.WordWrap
                     font.family: Fonts.inter
@@ -248,16 +253,18 @@ ColumnLayout{
                     
                 }
                 Text {
+                    id:newBalance
+                    property real new_balance_int: parseInt(user_acc_info.account_balance)
                     Layout.fillWidth: true
                     Layout.alignment: Qt.AlignLeft
                     textFormat: Text.RichText
-                    text: "New Balance : "+ "11,309 $"
+                    text: "New Balance : "+ "<b>"+Number(new_balance_int).toLocaleString(Qt.locale())+" $</b>"
                     horizontalAlignment: Text.AlignLeft
                     wrapMode: Text.WordWrap
                     font.family: Fonts.inter
                     font.pointSize: 9
                     font.weight: 600
-                    color: "#444"
+                    color: new_balance_int < 0 ? "red":"#444"
                     
                 }
             }
@@ -270,10 +277,11 @@ ColumnLayout{
                 font.family: Fonts.inter
                 font.pointSize: 10
                 font.weight: 900
-                color: "#AEAFB3"
+                color: "#444"
                 
             }
             TextField_ {
+                id:description
                 Layout.fillWidth: true
                 placeholderText: "Insert the payment description ... "
                 onTextEdited:{
@@ -328,7 +336,7 @@ ColumnLayout{
             horizontalAlignment: Text.AlignLeft
             wrapMode: Text.WordWrap
             font.family: Fonts.inter
-            font.pointSize: 11
+            font.pointSize: 12
             font.weight: 900
             color: "#121b28"
             
@@ -338,28 +346,32 @@ ColumnLayout{
         }
         Text {
             Layout.alignment: Qt.AlignRight
-            text: qsTranslate('',"USD 12,232 $")
+            text: "USD "+Number(amount_to_pay_field.text).toLocaleString(Qt.locale())+"$"
             horizontalAlignment: Text.AlignLeft
             wrapMode: Text.WordWrap
             font.family: Fonts.inter
-            font.pointSize: 10
+            font.pointSize: 12
             font.weight: 900
             color: "#121b28"
             
         }
     }
     Button_{
+        enabled:(newBalance.new_balance_int >0) && (Number(amount_to_pay_field.text)>0)
         Layout.alignment:Qt.AlignRight
-        width:innerText.width + 48*2
+        Layout.preferredWidth:innerText.width + 48*2
         height:35
-        buttonText:qsTranslate("","Next")
+        buttonText:newBalance.new_balance_int <0 ? "Can't Send This Amount":"Next"
+        disabledBgColor:"#ccc"
         color: "#065AD8"
-        borderColor: "#065AD8" 
-        textColor: "white"
+        textColor: newBalance.new_balance_int <0 ? "#666":"white"
         fontWeight:600
         fontSize:10
-        borderWidth:1
         onClicked:{
+            stepsStack.push('./PaymentThirdStep.qml',{'search_acc_info':search_acc_info,
+                                                        'amountToPay':Number(amount_to_pay_field.text),
+                                                        'description':description.text
+                                                        })
         }
     }
 

@@ -85,7 +85,7 @@ ColumnLayout{
                 // Layout.maximumWidth:300
                 // Layout.minimumWidth:200
                 borderWidth: 0
-                placeholderText: qsTranslate('', 'Search for an Recipient')
+                placeholderText: qsTranslate('', 'Search for an Recipient by Account Number or Account ID')
                 onTextChanged: {
                     search_data.account_id_or_number=text
                 }
@@ -116,6 +116,12 @@ ColumnLayout{
                 fontWeight:600
                 fontSize:10
                 // borderWidth:1
+                onClicked:{
+                    busypopup.open()
+                    window.getAttr('search_acc').finished.connect(search_acc_slot);
+                    window.getAttr('search_acc').sendRequest(search_data)
+                    search_output.visible=true
+                }
 
             }
         }
@@ -135,30 +141,44 @@ ColumnLayout{
 
             RowLayout{
                 spacing:20
-                ColorImage {
-                    id: recipient_image
-                    // Layout.alignment:Qt.AlignHCenter|Qt.AlignTop
-                    source: 'data:image/svg+xml;utf8,<svg width="100" height="100" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.477 2 12C2 17.523 6.477 22 12 22C17.523 22 22 17.523 22 12C22 6.477 17.523 2 12 2ZM8.5 9.5C8.5 9.04037 8.59053 8.58525 8.76642 8.16061C8.94231 7.73597 9.20012 7.35013 9.52513 7.02513C9.85013 6.70012 10.236 6.44231 10.6606 6.26642C11.0852 6.09053 11.5404 6 12 6C12.4596 6 12.9148 6.09053 13.3394 6.26642C13.764 6.44231 14.1499 6.70012 14.4749 7.02513C14.7999 7.35013 15.0577 7.73597 15.2336 8.16061C15.4095 8.58525 15.5 9.04037 15.5 9.5C15.5 10.4283 15.1313 11.3185 14.4749 11.9749C13.8185 12.6313 12.9283 13 12 13C11.0717 13 10.1815 12.6313 9.52513 11.9749C8.86875 11.3185 8.5 10.4283 8.5 9.5ZM18.258 16.984C17.5092 17.9253 16.5575 18.6855 15.4739 19.2077C14.3904 19.7299 13.2029 20.0008 12 20C10.7971 20.0008 9.60965 19.7299 8.52607 19.2077C7.44249 18.6855 6.49081 17.9253 5.742 16.984C7.363 15.821 9.575 15 12 15C14.425 15 16.637 15.821 18.258 16.984Z" fill="#B0B4B8"/></svg>'
-                    // Layout.preferredWidth:10
-                    // Layout.preferredHeight:width
-                    // Layout.preferredWidth:width
-                    // Layout.preferredHeight:height
-                    // width:100
-                    // height:100
-                    // layer.enabled:true
-                    // layer.effect:OpacityMask {
-                    //     maskSource: Rectangle {
-                    //         width: recipient_image.width
-                    //         height: recipient_image.height
-                    //         radius: width/2
-                    //         // visible: false // this also needs to be invisible or it will cover up the image
-                    //     }
-                    // }
+                Loader {
+                    
+                    sourceComponent: search_acc_info!== undefined ? search_acc_info.account_id ===user_acc_info.account_id ? user_image : other_user_image :undefined
+                }
+                Component{
+                    id:user_image
+                    ColorImage {
+                        id: recipient_image
+                        // Layout.alignment:Qt.AlignHCenter|Qt.AlignTop
+                        source:'http://localhost:8000/user/kyc/file/image?token='+user_info.token 
+                        // Layout.preferredWidth:10
+                        // Layout.preferredHeight:width
+                        Layout.preferredWidth:width
+                        Layout.preferredHeight:height
+                        width:100
+                        height:100
+                        layer.enabled:true
+                        layer.effect:OpacityMask {
+                            maskSource: Rectangle {
+                                width: recipient_image.width
+                                height: recipient_image.height
+                                radius: width/2
+                                // visible: false // this also needs to be invisible or it will cover up the image
+                            }
+                        }
+                    }
+                }
+                Component{
+                    id:other_user_image
+                    ColorImage {
+                        id: recipient_image
+                        source:'data:image/svg+xml;utf8,<svg width="100" height="100" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.477 2 12C2 17.523 6.477 22 12 22C17.523 22 22 17.523 22 12C22 6.477 17.523 2 12 2ZM8.5 9.5C8.5 9.04037 8.59053 8.58525 8.76642 8.16061C8.94231 7.73597 9.20012 7.35013 9.52513 7.02513C9.85013 6.70012 10.236 6.44231 10.6606 6.26642C11.0852 6.09053 11.5404 6 12 6C12.4596 6 12.9148 6.09053 13.3394 6.26642C13.764 6.44231 14.1499 6.70012 14.4749 7.02513C14.7999 7.35013 15.0577 7.73597 15.2336 8.16061C15.4095 8.58525 15.5 9.04037 15.5 9.5C15.5 10.4283 15.1313 11.3185 14.4749 11.9749C13.8185 12.6313 12.9283 13 12 13C11.0717 13 10.1815 12.6313 9.52513 11.9749C8.86875 11.3185 8.5 10.4283 8.5 9.5ZM18.258 16.984C17.5092 17.9253 16.5575 18.6855 15.4739 19.2077C14.3904 19.7299 13.2029 20.0008 12 20C10.7971 20.0008 9.60965 19.7299 8.52607 19.2077C7.44249 18.6855 6.49081 17.9253 5.742 16.984C7.363 15.821 9.575 15 12 15C14.425 15 16.637 15.821 18.258 16.984Z" fill="#B0B4B8"/></svg>'
+                    }
                 }
                 ColumnLayout{
                     Text {
                         Layout.alignment:Qt.AlignLeft
-                        text: search_acc_info !== undefined ? search_acc_info.full_name : ''
+                        text: search_acc_info !== undefined ? search_acc_info.full_name + (search_acc_info.account_id ===user_acc_info.account_id ? " (You)" : "") : ''
                         // text: user_kyc_form.full_name
                         horizontalAlignment: Text.AlignLeft
                         font.family: Fonts.inter
@@ -176,7 +196,7 @@ ColumnLayout{
                         wrapMode: Text.WordWrap
                         font.weight: 600
                         font.pointSize: 10
-                        color: "#AEAFB3"
+                        color: '#2381DF'
                     }
                     Text {
                         Layout.alignment:Qt.AlignLeft
@@ -205,15 +225,15 @@ ColumnLayout{
                 Layout.fillWidth:true
             }
             Button_{
+                enabled:search_acc_info!== undefined ?search_acc_info.account_id !==user_acc_info.account_id : null
+                disabledBgColor:"#ccc"
                 width:innerText.width + 20*2
                 height:40
                 buttonText:qsTranslate("","Choose")
                 color: "#065AD8"
-                borderColor: "#065AD8" 
-                textColor: "white"
+                textColor: enabled ? "white" : "#666"
                 fontWeight:600
                 fontSize:10
-                borderWidth:1
                 onClicked:{
                     stepsStack.push('./PaymentSecondStep.qml',{'search_acc_info':search_acc_info})
                 }
