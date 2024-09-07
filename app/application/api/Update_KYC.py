@@ -43,6 +43,7 @@ class Update_KYC(QThread):
                 
                 self.main_app.engine.rootContext().setContextProperty('user_kyc_info',self.main_app.user_kyc_info)        
                 
+            print(response.json())
             # this is out of the if statement
             self.finished.emit(response.status_code,response.json())
         except:

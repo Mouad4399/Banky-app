@@ -91,6 +91,15 @@ Rectangle{
             anchors.fill: parent
             // color:"red"
             radius: 12
+            layer.enabled: true
+            layer.effect: DropShadow {
+                horizontalOffset: 0
+                verticalOffset: 4
+                radius: 12
+                samples: 16
+                color: "#100B2714"
+                z: -1
+            }
         }
         contentItem:Rectangle {
             // anchors.fill: parent
@@ -531,7 +540,7 @@ Rectangle{
                                 spacing:20
                                 ColorImage {
                                     id: user_image_edit
-                                    // Layout.alignment:Qt.AlignHCenter|Qt.AlignTop
+                                    Layout.alignment:Qt.AlignTop
                                     source: 'http://localhost:8000/user/kyc/file/image?token='+user_info.token
                                     Layout.preferredWidth:70
                                     Layout.preferredHeight:width
@@ -696,10 +705,10 @@ Rectangle{
                             bgRadius: 8
                             onTextEdited:{
                                 if(text=== Qt.formatDateTime(new Date(user_kyc_form.date_of_birth),"yyyy-MM-dd")){
-                                        delete updated_kyc.date;
+                                        delete updated_kyc.date_of_birth;
                                         return
                                     }else{
-                                        updated_kyc.date=text
+                                        updated_kyc.date_of_birth=text
                                     }
                             }
                         }
@@ -997,7 +1006,7 @@ Rectangle{
             updated_kyc[field_name]=String(fileOpen.currentFile).substr(8);
             if (field_name === 'identity_image'){
                 identity_image.source='file:'+String(fileOpen.currentFile).substr(8)
-            }else if(field_name === 'signature_image'){
+            }else if(field_name === 'signature'){
                 signature_image.source='file:'+String(fileOpen.currentFile).substr(8)
             }else if(field_name === 'image'){
                 user_image_edit.source='file:'+String(fileOpen.currentFile).substr(8)

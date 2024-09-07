@@ -20,6 +20,13 @@ Rectangle{
     
     }
 
+    Component.onCompleted:{
+        window.getAttr('get_acc').finished.connect(function get_acc_slot(code , json){
+            window.getAttr('get_acc').finished.disconnect(get_acc_slot)
+        });
+        window.getAttr('get_acc').sendRequest()
+    }
+
 
     ColumnLayout {
         anchors.fill: parent

@@ -18,8 +18,7 @@ Rectangle{
     color:"#eff1fc"
 
     function isReadyToLeave(){
-        
-        return (stepsStack.depth<=1)
+        return (stepsStack.depth<=1 || stepsStack.currentItem.objectName==="PaymentSucceeded")
     
     }
 
@@ -91,6 +90,15 @@ Rectangle{
             anchors.fill: parent
             // color:"red"
             radius: 12
+            layer.enabled: true
+            layer.effect: DropShadow {
+                horizontalOffset: 0
+                verticalOffset: 4
+                radius: 12
+                samples: 16
+                color: "#100B2714"
+                z: -1
+            }
         }
         contentItem:Rectangle {
             // anchors.fill: parent
@@ -228,14 +236,14 @@ Rectangle{
     property variant updated_kyc:{'dummyKey':''}
 
 
-    function get_acc_slot(code , json){
-        user_acc_form=user_acc_info
-        window.getAttr('get_acc').finished.disconnect(get_acc_slot)
-    }
+
     Component.onCompleted:{
         // busypopup.open()
-        // window.getAttr('get_acc').finished.connect(get_acc_slot);
-        // window.getAttr('get_acc').sendRequest()
+        window.getAttr('get_acc').finished.connect(function get_acc_slot(code , json){
+            window.getAttr('get_acc').finished.disconnect(get_acc_slot)
+        });
+        window.getAttr('get_acc').sendRequest()
+
 
 
         

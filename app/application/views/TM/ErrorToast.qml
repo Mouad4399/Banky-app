@@ -48,6 +48,7 @@ Rectangle {
                 Layout.minimumWidth: 150
                 font.family: Fonts.inter
                 font.pointSize: 10
+                textFormat: Text.RichText
                 text: qsTr(toast.messageTitle)
                 font.weight: 700
                 wrapMode: Text.WordWrap
@@ -62,6 +63,7 @@ Rectangle {
                 wrapMode: Text.WordWrap
                 font.weight: 200
                 text: toast.messageBody
+                textFormat: Text.RichText
             }
         }
         Button_ {

@@ -9,7 +9,7 @@ import "./views"
 Window {
     id: authmain_app
     width: 400
-    height: 500
+    height: stack.depth >1 ? 530:500
     visible: true
     flags: Qt.Window | Qt.FramelessWindowHint
     color: "transparent"
@@ -69,9 +69,104 @@ Window {
                 // Layout.maximumWidth:40
 
             }
-            LoginForm{
+            
+            StackView {
+                id:stack
+                Layout.fillWidth:true
+                Layout.fillHeight: true
+                implicitHeight: currentItem.implicitHeight
+                // Layout.leftMargin:20
+                // Layout.rightMargin:20
+                // Layout.bottomMargin:5
+
+                initialItem:LoginForm{
+                    
+                }
+
+                popEnter: Transition {
+                    // slide_in_left
+                    LineAnimation {
+                        property: "x"
+                        from: (stack.mirrored ? -0.5 : 0.5) * -stack.width
+                        to: 0
+                    }
+                    FadeIn {
+                    }
+                }
+
+                popExit: Transition {
+                    // slide_out_right
+                    LineAnimation {
+                        property: "x"
+                        from: 0
+                        to: (stack.mirrored ? -0.5 : 0.5) * stack.width
+                    }
+                    FadeOut {
+                    }
+                }
+
+                pushEnter: Transition {
+                    // slide_in_right
+                    LineAnimation {
+                        property: "x"
+                        from: (stack.mirrored ? -0.5 : 0.5) * stack.width
+                        to: 0
+                    }
+                    FadeIn {
+                    }
+                }
+
+                pushExit: Transition {
+                    // slide_out_left
+                    LineAnimation {
+                        property: "x"
+                        from: 0
+                        to: (stack.mirrored ? -0.5 : 0.5) * -stack.width
+                    }
+                    FadeOut {
+                    }
+                }
+
+                replaceEnter: Transition {
+                    // slide_in_right
+                    LineAnimation {
+                        property: "x"
+                        from: (stack.mirrored ? -0.5 : 0.5) * stack.width
+                        to: 0
+                    }
+                    FadeIn {
+                    }
+                }
+
+                replaceExit: Transition {
+                    // slide_out_left
+                    LineAnimation {
+                        property: "x"
+                        from: 0
+                        to: (stack.mirrored ? -0.5 : 0.5) * -stack.width
+                    }
+                    FadeOut {
+                    }
+                }
                 
+                component LineAnimation: NumberAnimation {
+                    duration: 200
+                    easing.type: Easing.OutCubic
+                }
+
+                component FadeIn: LineAnimation {
+                    property: "opacity"
+                    from: 0.0
+                    to: 1.0
+                }
+
+                component FadeOut: LineAnimation {
+                    property: "opacity"
+                    from: 1.0
+                    to: 0.0
+                }
             }
+            
         }
     }
 }

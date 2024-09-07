@@ -15,13 +15,11 @@ ColumnLayout{
     required property real amountToPay 
     required property string description 
     ColorImage {
-        id: closebtn
         Layout.alignment: Qt.AlignLeft | Qt.AlignTop
         source: 'data:image/svg+xml;utf8,<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 11V13H7.99997L13.5 18.5L12.08 19.92L4.15997 12L12.08 4.08L13.5 5.5L7.99997 11H20Z" fill="#699BF7"/></svg>'
         sourceSize.width:18
         color: 'black'
         Rectangle {
-            // id:closebtn_rect
             anchors.centerIn: parent
             width: parent.width + 4
             height: width
@@ -277,7 +275,299 @@ ColumnLayout{
         fontWeight:600
         fontSize:10
         onClicked:{
+            dialog.open()
         }
+    }
+    Dialog {
+        id: dialog
+        // standardButtons: DialogButtonBox.Ok
+        // anchors.centerIn:parentId
+        // anchors.centerIn:parent
+        // property var parentId
+        width: contentDialog.implicitWidth
+        height: contentDialog.implicitHeight
+        padding: 0
+        x: parent.width / 2 - width / 2
+        y: parent.height / 2 - height / 2
+
+        // property string imageToSend:''
+        // property string audioToSend:''
+
+        onAccepted:
+        {
+        }
+
+        onClosed: {
+        }
+
+        // topPadding: 0
+
+        enter: Transition {
+            // grow_fade_in
+            NumberAnimation {
+                property: "scale"
+                from: 0.9
+                to: 1.0
+                easing.type: Easing.OutQuint
+                duration: 220
+            }
+            NumberAnimation {
+                property: "opacity"
+                from: 0.0
+                to: 1.0
+                easing.type: Easing.OutCubic
+                duration: 150
+            }
+        }
+
+        exit: Transition {
+            // shrink_fade_out
+            NumberAnimation {
+                property: "scale"
+                from: 1.0
+                to: 0.9
+                easing.type: Easing.OutQuint
+                duration: 220
+            }
+            NumberAnimation {
+                property: "opacity"
+                from: 1.0
+                to: 0.0
+                easing.type: Easing.OutCubic
+                duration: 150
+            }
+        }
+
+        modal: true
+
+        background: Rectangle {
+            anchors.fill: parent
+            // color:"red"
+            radius: 12
+            layer.enabled: true
+            layer.effect: DropShadow {
+                horizontalOffset: 0
+                verticalOffset: 4
+                radius: 12
+                samples: 16
+                color: "#100B2714"
+                z: -1
+            }
+        }
+        contentItem:Rectangle {
+            // anchors.fill: parent
+            id: contentDialog
+            default property alias data: col.data
+            implicitWidth: col.width + 40
+            implicitHeight: col.height+40
+            radius: 12
+            // color: "white"
+            color: Qt.rgba(0,0,0,0)
+
+            ColumnLayout {
+                id: col
+                // width: 420
+                width:460
+                anchors.centerIn: parent
+                // anchors.horizontalCenter:parent.horizontalCenter
+
+                spacing: 15
+
+                ColorImage {
+                    id: closebtn
+                    Layout.alignment: Qt.AlignRight | Qt.AlignTop
+                    source: "image://img/close_icon.svg"
+                    sourceSize.width:18
+                    color: 'black'
+                    Rectangle {
+                        // id:closebtn_rect
+                        anchors.centerIn: parent
+                        width: parent.width + 4
+                        height: width
+                        color: Qt.rgba(0, 0, 0, 0)
+                        radius: width / 2
+                        z: -1
+
+                        MouseArea {
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            onEntered: {
+                                parent.border.color = "#065AD8";
+                            }
+                            onExited: {
+                                parent.border.color = Qt.rgba(0, 0, 0, 0);
+                            }
+                            onClicked: {
+                                dialog.close();
+                            }
+                        }
+                    }
+                }
+                // Item {
+                //     Layout.fillWidth: true
+                //     Layout.fillHeight: true
+                // }
+
+                ColumnLayout {
+                    // Layout.fillWidth: true
+                    Layout.alignment: Qt.AlignLeft
+                    spacing: 25
+                    Text {
+                        Layout.fillWidth: true
+                        Layout.alignment: Qt.AlignLeft
+                        text: qsTranslate('',"Confirm The Payment ")
+                        horizontalAlignment: Text.AlignLeft
+                        wrapMode: Text.WordWrap
+                        font.family: Fonts.inter
+                        font.pointSize: 17
+                        font.weight: 900
+                        color: "black"
+                    }
+                    Text {
+                        Layout.alignment: Qt.AlignLeft
+                        Layout.maximumWidth:parent.parent.width -40
+                        text: qsTranslate('',"Enter yout pin number bellow :")
+                        horizontalAlignment: Text.AlignLeft
+                        wrapMode: Text.WordWrap
+                        font.family: Fonts.inter
+                        font.pointSize: 10
+                        font.weight: 600
+                        color: "#787878"
+                    }
+                    Row {
+                        // Layout.fillHeight:true
+                        // height: parent.height * 0.7
+                        Layout.alignment:Qt.AlignHCenter | Qt.AlignVCenter
+                        spacing: 10
+                        // anchors.centerIn: parent
+
+                        Repeater {
+                            id:rep
+                            model: 4 // Number of OTP digits
+
+                            EmptyField_ {
+                                id: otpField
+
+                                width: 64
+                                height: 64
+                                // innerRec.radius:2
+                                bgRadius:2
+                                placeholderText:""
+                                // focus: index ===3 ? true : false
+                                maximumLength:1
+                                horizontalAlignment: TextInput.AlignHCenter
+                                verticalAlignment: TextInput.AlignVCenter
+                                font.pointSize: 27
+                                font.weight:700
+                                validator: IntValidator{}
+
+
+                                onTextChanged: {
+                                    errorMessage.visible=false
+                                    // window.disp(index)
+                                    if(text.length !==0){
+                                        if (index < 4-1){
+                                            otpField.parent.children[index + 1].forceActiveFocus()
+                                        }
+                                    }
+                                }
+                                // Focus the previous field on backspace
+                                property string stri :""
+                                Keys.onPressed: function(event){
+                                    if (event.key === Qt.Key_Backspace && text.length === 0 && index > 0) {
+                                        // window.disp()
+                                        previousItem.forceActiveFocus();
+                                        return;
+                                    }
+                                    if(event.matches(StandardKey.Paste)){
+                                        // window.disp(pastedText)
+                                        // stri= paste()
+                                        // stri = StandardKey.Paste.valueOf()
+                                        stri =window.getPaste()
+                                        for (let i=1 ;i<4 ; i++){
+                                            otpField.parent.children[i].text=stri[i]
+
+                                        }
+
+                                    }
+                                }
+
+                                // Reference to the next and previous items for navigation
+                                // property TextField nextItem: index < 4 - 1 ? otpField.parent.children[index + 1] :
+                                property var previousItem: index > 0 ? otpField.parent.children[index - 1] : null
+                            }
+                        }
+                    }
+
+                    
+                }
+                Text {
+                    id:errorMessage
+                    visible:false
+                    Layout.alignment:Qt.AlignCenter
+                    font.family: Fonts.inter
+                    text: 'ERROR : Pin Number is Incorrect !!'
+                    color: 'red'
+                    font.pointSize: 9
+                }
+                RowLayout{
+                    // Layout.fillWidth:true
+                    Layout.alignment: Qt.AlignRight
+                    Layout.topMargin:15
+                    spacing: 15
+                    // Item{
+                    //     Layout.fillWidth:true
+                    // }
+                    Button_ {
+                        id:confirm_btn
+                        // Layout.alignment: Qt.AlignCenter
+                        // Layout.fillWidth:true
+                        // width:Layout.preferredWidth
+                        // height: 45
+                        width:innerText.width + 16*2
+                        height:35
+                        buttonText: qsTranslate('',"Confirm")
+                        fontSize:11
+                        fontWeight: 700
+                        color:"#50DC6C"
+                        property string pin_number
+                        onClicked: {
+                            for (let i=0 ;i<rep.count; i++){
+                                pin_number+=rep.itemAt(i).text
+                            }
+                            // console.log(pin_number)
+                            
+
+                            window.getAttr('transfer_amount').finished.connect(function transfer_amount_slot(code , json){
+                                busypopup.close()
+                                if(code !== 200){
+                                    errorMessage.visible=true
+                                }else{
+                                    toastmanager.show(true,"Payment Process :" ,"your Payment of USD <b>"+amountToPay+"</b>$ sent to <b>"+search_acc_info.full_name+"</b> was successfully completed")
+                                    dialog.accept();
+                                    stepsStack.push('./PaymentSucceeded.qml',{'search_acc_info':search_acc_info,
+                                                    'amountToPay':Number(amountToPay),
+                                                    'description':description
+                                                    })
+                                }
+                                window.getAttr('transfer_amount').finished.disconnect(transfer_amount_slot)
+                            });
+                            busypopup.open()
+                            window.getAttr('transfer_amount').sendRequest( {
+                                'account_number':search_acc_info.account_number,
+                                'amount':amountToPay ,
+                                'pin_number':pin_number,
+                                'description':description
+                                })  
+
+                            pin_number=""
+                        }
+                    }
+                }
+            }
+
+        }
+
     }
 
 }
