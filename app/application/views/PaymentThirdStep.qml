@@ -547,7 +547,8 @@ ColumnLayout{
                                     dialog.accept();
                                     stepsStack.push('./PaymentSucceeded.qml',{'search_acc_info':search_acc_info,
                                                     'amountToPay':Number(amountToPay),
-                                                    'description':description
+                                                    'description':description,
+                                                    'transaction_id':json.transaction_id
                                                     })
                                 }
                                 window.getAttr('transfer_amount').finished.disconnect(transfer_amount_slot)

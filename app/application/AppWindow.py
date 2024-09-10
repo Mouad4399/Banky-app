@@ -20,19 +20,27 @@ from .api.Get_Acc import Get_Acc
 from .api.Update_KYC import Update_KYC
 from .api.Search_Acc import Search_Acc
 from .api.Transfer_Amount import Transfer_Amount
+from .api.Get_Transaction import Get_Transaction
 
 class AppWindow(QObject):
     
     def __init__(self,main_app:QObject) -> None:
         super().__init__()
         
-        
+        # empty_kyc ={'id': '', 'full_name': '', 'image': '', 'marrital_status': '', 'gender': '', 'identity_type': '', 'identity_image': '', 'date_of_birth': '', 'signature': '', 'country': '', 'state': '', 'city': '', 'mobile': '', 'fax': '', 'date': '', 'user':'' , 'account': ''}
+        # main_app.engine.rootContext().setContextProperty('user_kyc_info',empty_kyc)   
+        # empty_acc={'id': '', 'account_balance': '', 'account_number': '', 'account_id': '', 'pin_number': '', 'red_code': '', 'account_status': '', 'date': '', 'kyc_submitted': '', 'kyc_confirmed': '', 'review': '', 'user': '', 'recommended_by': ''}     
+        # main_app.engine.rootContext().setContextProperty('user_acc_info',empty_acc)        
+
+
+
         self.logout=Logout(main_app)
         self.get_kyc=Get_KYC(main_app)
         self.get_acc=Get_Acc(main_app)
         self.update_kyc=Update_KYC(main_app)
         self.search_acc=Search_Acc(main_app)
         self.transfer_amount=Transfer_Amount(main_app)
+        self.get_transaction=Get_Transaction(main_app)
         
         # essentials
         main_app.window = self

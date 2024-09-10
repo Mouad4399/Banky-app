@@ -243,7 +243,7 @@ ColumnLayout{
                     Layout.fillWidth: true
                     Layout.alignment: Qt.AlignLeft
                     textFormat: Text.RichText
-                    text: "Available Balance : "+ "<b>"+ user_acc_info.account_balance+"$</b>"
+                    text: "Available Balance : "+ "<b>"+ Number(user_acc_info.account_balance).toLocaleString(Qt.locale())+"$</b>"
                     horizontalAlignment: Text.AlignLeft
                     wrapMode: Text.WordWrap
                     font.family: Fonts.inter

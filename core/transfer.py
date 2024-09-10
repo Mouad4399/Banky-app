@@ -44,8 +44,8 @@ def amount_transfer_process(request):
 
     if request.method == "POST":
         # receiver information
-        reciever_account = Account.objects.get(account_number=request.data.get('account_number'))
-        reciever = reciever_account.user 
+        receiver_account = Account.objects.get(account_number=request.data.get('account_number'))
+        receiver = receiver_account.user 
         # sender information
         sender = request.user 
         sender_account = request.user.account 
@@ -64,10 +64,10 @@ def amount_transfer_process(request):
             user=request.user,
             amount=amount,
             description=description,
-            reciever=reciever,
+            receiver=receiver,
             sender=sender,
             sender_account=sender_account,
-            reciever_account=reciever_account,
+            receiver_account=receiver_account,
             status="processing",
             transaction_type="transfer"
         )
@@ -81,9 +81,9 @@ def amount_transfer_process(request):
         sender_account.account_balance -= new_transaction.amount
         sender_account.save()
 
-        # Add the amount to the reciever
-        reciever_account.account_balance += new_transaction.amount
-        reciever_account.save()
+        # Add the amount to the receiver
+        receiver_account.account_balance += new_transaction.amount
+        receiver_account.save()
         
         # Create Notification Object
         # Notification.objects.create(
@@ -98,7 +98,7 @@ def amount_transfer_process(request):
         #     amount=new_transaction.amount
         # )
 
-        return Response({'detail':'Successful'}, status=status.HTTP_200_OK)
+        return Response({'transaction_id':new_transaction.transaction_id}, status=status.HTTP_200_OK)
 
 
     else:

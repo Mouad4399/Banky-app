@@ -26,10 +26,6 @@ ApplicationWindow {
     
     Component.onCompleted:{
         // if your repeate this it will do the multiple connect function at the same time
-        window.getAttr('get_acc').finished.connect(function get_acc_slot(code , json){
-            window.getAttr('get_acc').finished.disconnect(get_acc_slot)
-        });
-        window.getAttr('get_acc').sendRequest()
         window.getAttr('logout').finished.connect(function (code,json) {
                                 busypopup.close();
                                 if (code === 200) {
@@ -121,7 +117,7 @@ ApplicationWindow {
                     Layout.preferredHeight:40
                     imageSource:'data:image/svg+xml;utf8,<svg width="26" height="20" viewBox="0 0 26 20" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#clip0_21_65)"><path d="M21.7344 1.6016C21.3525 1.23441 21.3525 0.640657 21.7344 0.277376C22.1162 -0.085905 22.7338 -0.0898113 23.1116 0.277376L25.7116 2.77738C25.8944 2.95316 25.9959 3.19144 25.9959 3.44144C25.9959 3.69144 25.8944 3.92972 25.7116 4.1055L23.1116 6.6055C22.7297 6.97269 22.1122 6.97269 21.7344 6.6055C21.3566 6.23831 21.3525 5.64456 21.7344 5.28128L22.6687 4.38284L15.6 4.37503C15.0597 4.37503 14.625 3.95706 14.625 3.43753C14.625 2.918 15.0597 2.50003 15.6 2.50003H22.6728L21.7344 1.6016ZM4.26562 14.7266L3.33125 15.625H10.4C10.9403 15.625 11.375 16.043 11.375 16.5625C11.375 17.0821 10.9403 17.5 10.4 17.5H3.32719L4.26156 18.3985C4.64344 18.7657 4.64344 19.3594 4.26156 19.7227C3.87969 20.086 3.26219 20.0899 2.88437 19.7227L0.284375 17.2266C0.101562 17.0508 0 16.8125 0 16.5625C0 16.3125 0.101562 16.0743 0.284375 15.8985L2.88437 13.3985C3.26625 13.0313 3.88375 13.0313 4.26156 13.3985C4.63937 13.7657 4.64344 14.3594 4.26156 14.7227L4.26562 14.7266ZM3.9 2.50003H13.7272C13.5769 2.78128 13.4875 3.09769 13.4875 3.43753C13.4875 4.55863 14.4341 5.46878 15.6 5.46878H20.3694C20.2069 6.13285 20.3937 6.8555 20.93 7.37503C21.7547 8.168 23.0912 8.168 23.9159 7.37503L24.7 6.62113V15C24.7 16.3789 23.5341 17.5 22.1 17.5H12.2728C12.4231 17.2188 12.5125 16.9024 12.5125 16.5625C12.5125 15.4414 11.5659 14.5313 10.4 14.5313H5.63063C5.79313 13.8672 5.60625 13.1446 5.07 12.625C4.24531 11.8321 2.90875 11.8321 2.08406 12.625L1.3 13.3789V5.00003C1.3 3.62113 2.46594 2.50003 3.9 2.50003ZM6.5 5.00003H3.9V7.50003C5.33406 7.50003 6.5 6.37894 6.5 5.00003ZM22.1 12.5C20.6659 12.5 19.5 13.6211 19.5 15H22.1V12.5ZM13 13.75C14.0343 13.75 15.0263 13.3549 15.7577 12.6517C16.4891 11.9484 16.9 10.9946 16.9 10C16.9 9.00547 16.4891 8.05164 15.7577 7.34838C15.0263 6.64512 14.0343 6.25003 13 6.25003C11.9657 6.25003 10.9737 6.64512 10.2423 7.34838C9.51089 8.05164 9.1 9.00547 9.1 10C9.1 10.9946 9.51089 11.9484 10.2423 12.6517C10.9737 13.3549 11.9657 13.75 13 13.75Z" fill="#B0B4B8"/></g><defs><clipPath id="clip0_21_65"><rect width="26" height="20" fill="white"/></clipPath></defs></svg>'
                     imageSize.height:height/2
-                    buttonText:'Transaction'
+                    buttonText:'Transactions'
                     fontSize:11
                     checkable:true
                     autoExclusive: true
@@ -329,7 +325,7 @@ ApplicationWindow {
             id: stack
             anchors.fill: parent
             clip: true
-            initialItem: "./views/Dashboard.qml"
+            initialItem: "./views/Transactions.qml"
             
             function replaceIfReady(path){
                 if(currentItem.isReadyToLeave()){
@@ -443,6 +439,15 @@ ApplicationWindow {
             anchors.fill: parent
             // color:"red"
             radius: 12
+            layer.enabled: true
+            layer.effect: DropShadow {
+                horizontalOffset: 0
+                verticalOffset: 4
+                radius: 12
+                samples: 16
+                color: "#100B2714"
+                z: -1
+            }
         }
 
         BusyIndicator {

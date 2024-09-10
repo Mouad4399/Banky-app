@@ -542,6 +542,7 @@ Rectangle{
                                     id: user_image_edit
                                     Layout.alignment:Qt.AlignTop
                                     source: 'http://localhost:8000/user/kyc/file/image?token='+user_info.token
+                                    cache:false
                                     Layout.preferredWidth:70
                                     Layout.preferredHeight:width
                                     layer.enabled:true
@@ -847,6 +848,7 @@ Rectangle{
                                     source: 'http://localhost:8000/user/kyc/file/identity_image?token='+user_info.token
                                     Layout.fillWidth:true
                                     Layout.fillHeight:true
+                                    cache:false
                                     // Layout.preferredWidth:parent.width * 45/100
                                     // Layout.preferredHeight:width
                                     layer.enabled:true
@@ -910,6 +912,7 @@ Rectangle{
                                     source: 'http://localhost:8000/user/kyc/file/signature?token='+user_info.token
                                     Layout.fillWidth:true
                                     Layout.fillHeight:true
+                                    cache:false
                                     // Layout.preferredWidth:parent.width * 45/100
                                     // Layout.preferredHeight:width
                                     layer.enabled:true

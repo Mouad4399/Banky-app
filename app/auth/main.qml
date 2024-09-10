@@ -46,6 +46,27 @@ Window {
             anchors.bottom: closeWinBtn.bottom
             color: "#121B28"
             z: Infinity
+            RowLayout{
+                anchors.top:parent.top
+                anchors.left:parent.left
+                anchors.bottom:parent.bottom
+                anchors.leftMargin:8
+                spacing:10
+
+                ColorImage{
+                    Layout.alignment:Qt.AlignVCenter
+                    source: "image://img/banky_logo.svg"
+                    sourceSize.height:16
+                }
+                Text {
+                    Layout.alignment:Qt.AlignVCenter
+                    font.family: Fonts.inter
+                    text: 'Banky'
+                    color: 'white'
+                    font.pointSize: 10
+                    font.weight:300
+                }
+            }
             DragHandler {
                 onActiveChanged: if (active) {
                     authmain_app.startSystemMove();

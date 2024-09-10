@@ -226,6 +226,8 @@ def test(request):
         try:
             # For example, processing data or performing an update
             data = UserRegisterSerializer(User.objects.get(pk=request.user.id)).data
+            print(request.user.id)
+            print(request.user.pk)
             print(request.user.auth_token)
             # Process the data here
             print(f"this recieved data: {data}")

@@ -10,6 +10,7 @@ import Fonts 1.0
 ColorImage {
     id: image
     property real radius :8
+    cache:false
     layer.enabled:true
     layer.effect:OpacityMask {
         maskSource: Rectangle {

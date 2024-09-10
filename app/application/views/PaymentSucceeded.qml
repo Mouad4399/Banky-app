@@ -14,6 +14,7 @@ ColumnLayout{
     required property var search_acc_info 
     required property real amountToPay 
     required property string description 
+    required property string transaction_id 
     objectName:'PaymentSucceeded'
 
     Rectangle{
@@ -51,7 +52,7 @@ ColumnLayout{
                 Layout.preferredWidth:parent.width
                 Layout.alignment:Qt.AlignCenter
                 textFormat: Text.RichText
-                text: "Payment of <b>USD "+Number(amountToPay).toLocaleString(Qt.locale())+" $</b> was sent to <b>"+search_acc_info.full_name+"</b>"
+                text: "Payment <b>"+transaction_id+"</b> of <b>USD "+Number(amountToPay).toLocaleString(Qt.locale())+" $</b> was sent to <b>"+search_acc_info.full_name+"</b>"
                 horizontalAlignment: Text.AlignHCenter
                 wrapMode: Text.WordWrap
                 font.family: Fonts.inter

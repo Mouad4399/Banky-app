@@ -32,10 +32,10 @@ class Transaction(models.Model):
     amount = models.DecimalField(max_digits=12, decimal_places=2, default=0.00)
     description = models.CharField(max_length=1000, null=True, blank=True)
    
-    reciever = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name="reciever")
+    receiver = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name="receiver")
     sender = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name="sender")
    
-    reciever_account = models.ForeignKey(Account, on_delete=models.SET_NULL, null=True, related_name="reciever_account")
+    receiver_account = models.ForeignKey(Account, on_delete=models.SET_NULL, null=True, related_name="receiver_account")
     sender_account = models.ForeignKey(Account, on_delete=models.SET_NULL, null=True, related_name="sender_account")
 
     status = models.CharField(choices=TRANSACTION_STATUS, max_length=100, default="pending")

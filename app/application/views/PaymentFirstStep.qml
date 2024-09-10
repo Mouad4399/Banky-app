@@ -110,7 +110,7 @@ ColumnLayout{
                 // height: parent.height
                 Layout.fillHeight:true
                 buttonText:qsTranslate("","Search")
-                color: "black"
+                color: "#121b28"
                 // borderColor: "#065AD8" 
                 textColor: "white"
                 fontWeight:600
