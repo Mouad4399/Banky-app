@@ -9,6 +9,11 @@ it is a simple banking cross-platform desktop application (backend and frontend)
 
 ![image](https://github.com/user-attachments/assets/4abd4497-830a-476c-b14b-9fde1efd4111)
 
+- Dashboard
+
+![image](https://github.com/user-attachments/assets/cdd656ac-0eab-45b3-9097-3033490e68d1)
+
+  
 - Transactions
 
 ![image](https://github.com/user-attachments/assets/5522064b-d2ac-4093-b67c-162942ce2c62)
