@@ -4,6 +4,8 @@
 
 it is a simple banking cross-platform desktop application (backend and frontend) built using Django and QML
 
+ps : still under-development !!!
+
 # Images
 - Login
 
