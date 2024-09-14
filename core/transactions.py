@@ -40,42 +40,47 @@ def get_transactions(request):
 from django.utils.timezone import now, timedelta
 from django.db.models import Sum
 from django.http import JsonResponse
+
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def transactions_summary(request):
-    # Calculate the date 6 interval ago from today
-    interval_type=request.data.get('interval','days')
+    # Get the interval type ('days' or 'weeks')
+    interval_type = request.data.get('interval', 'days')
     
-    def timeDelta(count):
-        if (interval_type == 'days'):
-            return timedelta(days=count)
-        return timedelta(weeks=count)
-    
+    def get_interval_range(count):
+        if interval_type == 'days':
+            # Calculate the start and end of the day, setting the time to midnight (start of day)
+            end_of_day = now().replace(hour=23, minute=59, second=59, microsecond=999) - timedelta(days=count)
+            start_of_day = end_of_day - timedelta(days=1)
+            return start_of_day, end_of_day
+        else:
+            # Calculate the start and end of the week, setting the time to the start of the week (e.g., Monday)
+            end_of_week = now().replace(hour=23, minute=59, second=59, microsecond=999) - timedelta(weeks=count)
+            start_of_week = end_of_week - timedelta(weeks=1)
+            return start_of_week, end_of_week
 
-    interval_ago = now() - timeDelta(7)
-    
-    # Filter transactions from the last 7 interval
-    transactions = Transaction.objects.filter(Q(date__gte=interval_ago) & Q(sender=request.user)|Q(receiver=request.user))
-    
-    # Initialize a list to hold the data
+    # Initialize a list to hold the interval data (7 days or 6 weeks)
     interval_data = []
 
-    # Loop through the past 6 interval
+    # Loop through the past 7 intervals
     for interval in range(7):
-        start_interval = now() - timeDelta(interval + 1)
-        end_interval = now() - timeDelta(interval)
+        start_interval, end_interval = get_interval_range(interval)
+        
+        # Filter transactions within the interval for the user
+        transactions = Transaction.objects.filter(
+            Q(sender=request.user) | Q(receiver=request.user),
+            date__range=[start_interval, end_interval]
+        )
         
         # Get outcome (sent transactions) and income (received transactions)
         income = transactions.filter(
             transaction_type="transfer", 
-            receiver=request.user,
-            date__range=[start_interval, end_interval]
+            receiver=request.user
         ).aggregate(Sum('amount'))['amount__sum'] or 0
         
         outcome = transactions.filter(
             transaction_type="transfer", 
-            sender=request.user,
-            date__range=[start_interval, end_interval]
+            sender=request.user
         ).aggregate(Sum('amount'))['amount__sum'] or 0
 
         interval_data.append({
@@ -84,8 +89,7 @@ def transactions_summary(request):
             "outcome": outcome
         })
     
-    # Reverse the data to go from oldest interval to most recent
+    # Reverse the data to show from oldest to most recent interval
     interval_data.reverse()
 
     return JsonResponse({"interval_transactions": interval_data}, safe=False)
-    

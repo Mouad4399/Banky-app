@@ -235,6 +235,7 @@ Rectangle{
                                     bgRadius:4
                                     currentIndex:0
                                     onActivated:{
+                                        // currentIndex=index
                                         chart_loader.active =false
                                         chart_loader.active =true
                                     }
@@ -270,6 +271,9 @@ Rectangle{
                                                 // here change to the data from api
                                                 // console.log(chartView.seriesData[timeStep].outcome)
                                                 // console.log(timeStep)
+                                                if (axisY.maximumValue<Math.max(Number(chartView.seriesData[timeStep].outcome),Number(chartView.seriesData[timeStep].income))){
+                                                    axisY.maximumValue=Math.max(Number(chartView.seriesData[timeStep].outcome),Number(chartView.seriesData[timeStep].income))
+                                                }
                                                 series2.append(timeStep,chartView.seriesData[timeStep].outcome)
                                                 series1.append(timeStep,chartView.seriesData[timeStep].income)
                                                 timeStep++
@@ -292,7 +296,7 @@ Rectangle{
                                             });
                                             // busypopup.open()
                                             window.getAttr('get_transactions_summary').sendRequest({
-                                                'interval':interval_combo.model[interval_combo.currentIndex]
+                                                'interval':['days','weeks'][interval_combo.currentIndex]
                                             })
                                         }
 
@@ -306,8 +310,9 @@ Rectangle{
                                         }
                                         ValueAxis {
                                             id: axisY
-                                            max:2300.35+2300.35*0.1
-                                            min: -2300.35*0.1
+                                            property real maximumValue:0
+                                            max:maximumValue+maximumValue*0.1
+                                            min: -maximumValue*0.1
                                             // max: {return Math.max(series1.maxPoint.y,series2.maxPoint.y)+ 10}
                                             // gridLineColor:"transparent"
                                             // labelsColor:"transparent"
@@ -321,7 +326,9 @@ Rectangle{
                                             borderWidth: 0
                                             color:"blue"
                                             brush:{
-                                                return window.GetBrush(chartView.height + 25,"blue")}
+                                                if(window)
+                                                    return window.GetBrush(chartView.height + 25,"blue")
+                                            }
                                             axisX: axisX
                                             axisY: axisY
                                             upperSeries: series1
@@ -390,7 +397,9 @@ Rectangle{
                                             borderWidth: 0
                                             color:"red"
                                             brush:{
-                                                return window.GetBrush(chartView.height + 25,"red")}
+                                                if(window)
+                                                    return window.GetBrush(chartView.height + 25,"red")
+                                            }
                                             axisX: axisX
                                             axisY: axisY
                                             upperSeries: series2
