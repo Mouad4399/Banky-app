@@ -6,6 +6,14 @@ it is a simple banking cross-platform desktop application (backend and frontend)
 
 ps : still under-development !!!
 
+# to use it :
+
+- open two terminal windows : 
+
+- run the server  `python manage.py runserver`
+
+- run the app `python ./app`
+
 # Images
 - Login
 
