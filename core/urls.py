@@ -7,4 +7,5 @@ urlpatterns=[
     path('search-account/', transfer.search_account, name='search-acc'),
     path('amount-transfer-process/', transfer.amount_transfer_process, name='amount_transfer_process'),
     path('transactions/', transactions.get_transactions, name='transactions'),
+    path('transactions_summary/', transactions.transactions_summary, name='transactions_summary'),
 ]

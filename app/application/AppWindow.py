@@ -21,6 +21,7 @@ from .api.Update_KYC import Update_KYC
 from .api.Search_Acc import Search_Acc
 from .api.Transfer_Amount import Transfer_Amount
 from .api.Get_Transaction import Get_Transaction
+from .api.Get_Transactions_Summary import Get_Transactions_Summary
 
 class AppWindow(QObject):
     
@@ -41,6 +42,7 @@ class AppWindow(QObject):
         self.search_acc=Search_Acc(main_app)
         self.transfer_amount=Transfer_Amount(main_app)
         self.get_transaction=Get_Transaction(main_app)
+        self.get_transactions_summary=Get_Transactions_Summary(main_app)
         
         # essentials
         main_app.window = self

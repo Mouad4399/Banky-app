@@ -21,6 +21,8 @@ T.ComboBox {
     property int borderWidth:0
     property int bgRadius:0
     property string placeholderText:''
+    property alias emptyField:emptyField
+    property alias indicatorimage:indicatorimage
 
 
     TextMetrics {
@@ -49,6 +51,7 @@ T.ComboBox {
     }
 
     indicator: ColorImage {
+        id:indicatorimage
         visible:enabled
         x: control.mirrored ? control.padding : control.width - sourceSize.width - control.padding -5
         y: control.topPadding + (control.availableHeight - height) / 2
@@ -60,6 +63,7 @@ T.ComboBox {
     }
 
     contentItem: EmptyField_ {
+        id:emptyField
         leftPadding: 10
         // topPadding: Material.textFieldVerticalPadding
         // bottomPadding: Material.textFieldVerticalPadding
