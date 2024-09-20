@@ -21,7 +21,7 @@ ps : still under-development !!!
 
 - Dashboard
 
-![image](https://github.com/user-attachments/assets/cdd656ac-0eab-45b3-9097-3033490e68d1)
+![image](https://github.com/user-attachments/assets/da6888b8-6228-4064-a813-8592fca0ca8c)
 
   
 - Transactions
