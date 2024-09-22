@@ -12,8 +12,9 @@ import Components 1.0
 ColumnLayout{
     spacing:10
     required property var search_acc_info 
-    required property real amountToPay 
+    required property real amount 
     required property string description 
+    required property string payment_type
     ColorImage {
         Layout.alignment: Qt.AlignLeft | Qt.AlignTop
         source: 'data:image/svg+xml;utf8,<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 11V13H7.99997L13.5 18.5L12.08 19.92L4.15997 12L12.08 4.08L13.5 5.5L7.99997 11H20Z" fill="#699BF7"/></svg>'
@@ -57,7 +58,7 @@ ColumnLayout{
     Text {
         Layout.fillWidth: true
         Layout.alignment: Qt.AlignLeft
-        text: qsTranslate('',"Step 3 : Confirm Your Transfer")
+        text: "Step 3 : Confirm Your "+payment_type
         horizontalAlignment: Text.AlignLeft
         wrapMode: Text.WordWrap
         font.family: Fonts.inter
@@ -192,12 +193,12 @@ ColumnLayout{
 
                     Repeater{
                         model:[
-                            'You Send',
-                            'Recipient gets',
+                            'You '+(payment_type==="Transfer"?"Send":"Receive"),
+                            payment_type==="Transfer"?'Recipient gets' :'Recipient is request of',
                             'E-mail of receiver',
                             'Fee',
                             'Purpose',
-                            'Transfer will be receive on',
+                            payment_type+ ' will be receive on',
                             ]
                         delegate:Text {
                             Layout.column:0
@@ -215,8 +216,8 @@ ColumnLayout{
                     }
                     Repeater{
                         model:[
-                            "USD "+amountToPay.toLocaleString(Qt.locale())+"$",
-                            "USD "+amountToPay.toLocaleString(Qt.locale())+"$",
+                            "USD "+amount.toLocaleString(Qt.locale())+"$",
+                            "USD "+amount.toLocaleString(Qt.locale())+"$",
                             search_acc_info.email,
                             'Free',
                             description,
@@ -538,25 +539,25 @@ ColumnLayout{
                             // console.log(pin_number)
                             
 
-                            window.getAttr('transfer_amount').finished.connect(function transfer_amount_slot(code , json){
+                            window.getAttr(payment_type==="Transfer"?'transfer_amount':'request_amount').finished.connect(function payment_process_slot(code , json){
                                 busypopup.close()
                                 if(code !== 200){
                                     errorMessage.visible=true
                                 }else{
-                                    toastmanager.show(true,"Payment Process :" ,"your Payment of USD <b>"+amountToPay+"</b>$ sent to <b>"+search_acc_info.full_name+"</b> was successfully completed")
+                                    toastmanager.show(true,"Payment Process :" ,"your "+(payment_type==="Transfer"?"Payment":"Request")+" of USD <b>"+amount+"</b>$ sent to <b>"+search_acc_info.full_name+"</b> was successfully completed")
                                     dialog.accept();
                                     stepsStack.push('./PaymentSucceeded.qml',{'search_acc_info':search_acc_info,
-                                                    'amountToPay':Number(amountToPay),
+                                                    'amount':Number(amount),
                                                     'description':description,
                                                     'transaction_id':json.transaction_id
                                                     })
                                 }
-                                window.getAttr('transfer_amount').finished.disconnect(transfer_amount_slot)
+                                window.getAttr(payment_type==="Transfer"?'transfer_amount':'request_amount').finished.disconnect(payment_process_slot)
                             });
                             busypopup.open()
-                            window.getAttr('transfer_amount').sendRequest( {
+                            window.getAttr(payment_type==="Transfer"?'transfer_amount':'request_amount').sendRequest( {
                                 'account_number':search_acc_info.account_number,
-                                'amount':amountToPay ,
+                                'amount':amount ,
                                 'pin_number':pin_number,
                                 'description':description
                                 })  

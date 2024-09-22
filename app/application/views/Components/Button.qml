@@ -26,7 +26,7 @@ AbstractButton {
     property real imageRadius
     property alias imageSize: innerImage.sourceSize
     property alias image: innerImage
-    property bool enabledEffect:button.buttonText!==''
+    property bool enabledEffect:button.buttonText===''
     property color disabledBgColor: "transparent"
     property color disabledImageColor: "transparent"
     property var scaleTo: 0.96

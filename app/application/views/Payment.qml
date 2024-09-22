@@ -308,10 +308,9 @@ Rectangle{
                     Layout.topMargin:20
                     // Layout.bottomMargin:20
                     Text {
-                        
-                        Layout.fillWidth: true
+                        // Layout.fillWidth: true
                         Layout.alignment: Qt.AlignLeft
-                        text: qsTranslate('',"Make a Payment : ")
+                        text: "Make a Payment :"
                         horizontalAlignment: Text.AlignLeft
                         wrapMode: Text.WordWrap
                         font.family: Fonts.inter
@@ -320,12 +319,27 @@ Rectangle{
                         color: "#121B28"
                         
                     }
+                    Text {
+                        id:payment_type
+                        // Layout.fillWidth: true
+                        Layout.alignment: Qt.AlignLeft
+                        text: ""
+                        horizontalAlignment: Text.AlignLeft
+                        wrapMode: Text.WordWrap
+                        font.family: Fonts.inter
+                        font.pointSize: 18
+                        font.weight: 300
+                        color: Qt.lighter("#121b28",1.62)
+                        
+                    }
                     Item{
                         Layout.fillWidth:true
                     }
                     ColorImage{
+                        id:payment_icon
                         source:'data:image/svg+xml;utf8,<svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M5 4C4.20435 4 3.44129 4.31607 2.87868 4.87868C2.31607 5.44129 2 6.20435 2 7V8H22V7C22 6.20435 21.6839 5.44129 21.1213 4.87868C20.5587 4.31607 19.7956 4 19 4H5ZM22 10H2V17C2 17.7956 2.31607 18.5587 2.87868 19.1213C3.44129 19.6839 4.20435 20 5 20H19C19.7956 20 20.5587 19.6839 21.1213 19.1213C21.6839 18.5587 22 17.7956 22 17V10ZM8 15C8 14.7348 8.10536 14.4804 8.29289 14.2929C8.48043 14.1054 8.73478 14 9 14H13.414L13.293 13.879C13.1054 13.6915 12.9999 13.4371 12.9998 13.1719C12.9997 12.9066 13.105 12.6521 13.2925 12.4645C13.48 12.2769 13.7344 12.1714 13.9996 12.1713C14.2649 12.1712 14.5194 12.2765 14.707 12.464L16.535 14.293C16.7225 14.4805 16.8278 14.7348 16.8278 15C16.8278 15.2652 16.7225 15.5195 16.535 15.707L14.707 17.535C14.6148 17.6305 14.5044 17.7067 14.3824 17.7591C14.2604 17.8115 14.1292 17.8391 13.9964 17.8403C13.8636 17.8414 13.7319 17.8161 13.609 17.7658C13.4861 17.7155 13.3745 17.6413 13.2806 17.5474C13.1867 17.4535 13.1125 17.3419 13.0622 17.219C13.0119 17.0961 12.9866 16.9644 12.9877 16.8316C12.9889 16.6988 13.0165 16.5676 13.0689 16.4456C13.1213 16.3236 13.1975 16.2132 13.293 16.121L13.414 16H9C8.73478 16 8.48043 15.8946 8.29289 15.7071C8.10536 15.5196 8 15.2652 8 15Z" fill="#B0B4B8"/></svg>'
-                        color:"#121b28"
+                        color: Qt.lighter("#121b28",1.62)
+                        sourceSize.width:50
                     }
                 }
                 
@@ -338,7 +352,8 @@ Rectangle{
                     // Layout.rightMargin:20
                     // Layout.bottomMargin:5
 
-                    initialItem:"./PaymentFirstStep.qml"
+                    // initialItem:"./PaymentFirstStep.qml"
+                    initialItem:"./ChoosePlan.qml"
 
                     popEnter: Transition {
                         // slide_in_left

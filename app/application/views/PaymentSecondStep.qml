@@ -12,6 +12,7 @@ import Components 1.0
 ColumnLayout{
     spacing:10
     required property var search_acc_info 
+    required property string payment_type
     ColorImage {
         id: closebtn
         Layout.alignment: Qt.AlignLeft | Qt.AlignTop
@@ -57,7 +58,7 @@ ColumnLayout{
     Text {
         Layout.fillWidth: true
         Layout.alignment: Qt.AlignLeft
-        text: qsTranslate('',"Step 2 :Set Amount of Transfer")
+        text: "Step 2 : Set Amount to "+payment_type
         horizontalAlignment: Text.AlignLeft
         wrapMode: Text.WordWrap
         font.family: Fonts.inter
@@ -164,7 +165,7 @@ ColumnLayout{
             Text {
                 Layout.fillWidth: true
                 Layout.alignment: Qt.AlignLeft
-                text: qsTranslate('',"You Send")
+                text: "You "+ (payment_type==="Transfer"?"send":"receive")
                 horizontalAlignment: Text.AlignLeft
                 wrapMode: Text.WordWrap
                 font.family: Fonts.inter
@@ -215,9 +216,9 @@ ColumnLayout{
                         }
                         
                         borderWidth: 0
-                        placeholderText: qsTranslate('', 'Insert amount to send ...')
+                        placeholderText: qsTranslate('', 'Insert amount ...')
                         onTextEdited: {
-                            newBalance.new_balance_int = Number(user_acc_info.account_balance)-Number(text)
+                            newBalance.new_balance_int = Number(user_acc_info.account_balance)- (payment_type==="Transfer"? 1 : -1)*Number(text)
                         }
                     }
                     // Rectangle {
@@ -332,7 +333,7 @@ ColumnLayout{
         Text {
             Layout.fillWidth: true
             Layout.alignment: Qt.AlignLeft
-            text: qsTranslate('',"Total To Pay")
+            text: "Total To " + (payment_type==="Transfer"?"Pay":"Receive")
             horizontalAlignment: Text.AlignLeft
             wrapMode: Text.WordWrap
             font.family: Fonts.inter
@@ -358,19 +359,21 @@ ColumnLayout{
     }
     Button_{
         enabled:(newBalance.new_balance_int >0) && (Number(amount_to_pay_field.text)>0)
+        enabledEffect:true
         Layout.alignment:Qt.AlignRight
         Layout.preferredWidth:innerText.width + 48*2
         height:35
-        buttonText:newBalance.new_balance_int <0 ? "Can't Send This Amount":"Next"
+        buttonText:!enabled? "Can't Process This Amount":"Next"
         disabledBgColor:"#ccc"
         color: "#065AD8"
-        textColor: newBalance.new_balance_int <0 ? "#666":"white"
+        textColor: !enabled? "#666":"white"
         fontWeight:600
         fontSize:10
         onClicked:{
             stepsStack.push('./PaymentThirdStep.qml',{'search_acc_info':search_acc_info,
-                                                        'amountToPay':Number(amount_to_pay_field.text),
-                                                        'description':description.text
+                                                        'amount':Number(amount_to_pay_field.text),
+                                                        'description':description.text,
+                                                        'payment_type':payment_type
                                                         })
         }
     }

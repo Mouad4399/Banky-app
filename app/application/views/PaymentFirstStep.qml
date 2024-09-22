@@ -18,13 +18,14 @@ import Components 1.0
 // }
 ColumnLayout{
     // Layout.fillHeight:true
+    required property string payment_type
     property var search_data :{
         'account_id_or_number':''
     }
     property var search_acc_info 
     function search_acc_slot(code , json){
         busypopup.close()
-        if(code ===404){
+        if(code !== 200){
             notFound_alert.visible=true
             notFound_alert.notFound=true
             return
@@ -226,6 +227,7 @@ ColumnLayout{
             }
             Button_{
                 enabled:search_acc_info!== undefined ?search_acc_info.account_id !==user_acc_info.account_id : null
+                enabledEffect:true
                 disabledBgColor:"#ccc"
                 width:innerText.width + 20*2
                 height:40
@@ -235,7 +237,9 @@ ColumnLayout{
                 fontWeight:600
                 fontSize:10
                 onClicked:{
-                    stepsStack.push('./PaymentSecondStep.qml',{'search_acc_info':search_acc_info})
+                    stepsStack.push('./PaymentSecondStep.qml',{'search_acc_info':search_acc_info,
+                                                                'payment_type':payment_type
+                                                                })
                 }
             }
         }

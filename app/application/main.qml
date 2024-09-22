@@ -325,7 +325,7 @@ ApplicationWindow {
             id: stack
             anchors.fill: parent
             clip: true
-            initialItem: "./views/Transactions.qml"
+            initialItem: "./views/Dashboard.qml"
             
             function replaceIfReady(path){
                 if(currentItem.isReadyToLeave()){

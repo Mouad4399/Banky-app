@@ -669,10 +669,10 @@ Rectangle{
                                     Layout.fillWidth:true
                                 }
                                 Button_{
-                                    Layout.alignment:Qt.AlignRight
+                                    Layout.alignment:Qt.AlignTop | Qt.AlignRight
                                     width:innerText.width + 10*2
                                     height:35
-                                    buttonText:"View All >>"
+                                    buttonText:"+ Add"
                                     color: "#065AD8"
                                     borderColor: "#065AD8" 
                                     textColor: "white"
@@ -682,6 +682,200 @@ Rectangle{
                                     onClicked:{
                                         stack.replaceIfReady('./views/Transactions.qml')
                                     }
+                                }
+                            }
+                            Rectangle {
+                                id:show
+                                width: 240; height: 160
+                                // Layout.fillWidth:true
+                                // Layout.fillHeight:true
+                                transformOrigin: Item.TopLeft
+                                // color:"red"
+                                scale:(parent.width/width)
+                                Button_ {
+                                    id:leftArrow
+                                    z:Infinity
+                                    enabled:pathview.currentIndex !==0
+                                    disabledBgColor: '#ccc'
+                                    disabledImageColor: '#666'
+                                    imageColor:"#C4CDD5"
+                                    anchors.left:parent.left
+                                    anchors.top:parent.top
+                                    anchors.topMargin:parent.height/2 -height/2
+                                    buttonText: ''
+                                    height: 18
+                                    width: 18
+                                    borderRadius: width/2
+                                    color: "white"
+                                    hoverColor: "#e3e3e3"
+                                    pressColor: "#e3e3e3"
+                                    borderWidth: 1
+                                    imageSource: 'data:image/svg+xml;utf8,<svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15.1599 7.41L10.5799 12L15.1599 16.59L13.7499 18L7.74991 12L13.7499 6L15.1599 7.41Z" fill="#C4CDD5"/></svg>'
+                                    onClicked: {
+                                        pathview.decrementCurrentIndex()
+                                    }
+                                }
+                                Button_ {
+                                    id:rightArrow
+                                    z:Infinity
+                                    enabled:pathview.currentIndex !==(pathview.count -1)
+                                    disabledBgColor: '#ccc'
+                                    disabledImageColor: '#666'
+                                    imageColor:"#C4CDD5"
+                                    anchors.right:parent.right
+                                    anchors.top:parent.top
+                                    anchors.topMargin:parent.height/2 -height/2
+                                    buttonText: ''
+                                    height: 18
+                                    width: 18
+                                    borderRadius: width/2
+                                    color: "white"
+                                    hoverColor: "#e3e3e3"
+                                    pressColor: "#e3e3e3"
+                                    borderWidth: 1
+                                    imageSource: 'data:image/svg+xml;utf8,<svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8.84009 7.41L13.4201 12L8.84009 16.59L10.2501 18L16.2501 12L10.2501 6L8.84009 7.41Z" fill="#C4CDD5"/></svg>'
+                                    onClicked: {
+                                        pathview.incrementCurrentIndex()
+                                    }
+                                }
+
+                                
+
+                                Component {
+                                    id: delegate
+                                    
+                                    ColorImage{
+                                        width:71
+                                        height:45
+                                        source:"image://img/credit_card_"+((index%6)+1)+".svg"
+                                        visible:(pathview.currentIndex===(pathview.count-1))  || (pathview.currentIndex===0) ? ( Math.abs(index-pathview.currentIndex)<(pathview.count)/2):( Math.abs(index-pathview.currentIndex)<(pathview.count)/4)
+
+                                        id: wrapper
+                                        required property int index
+                                        opacity: PathView.opacity
+                                        scale: PathView.scale
+
+                                        // scale: PathView.scale
+                                        // opacity: 1
+                                        z:PathView.z
+                                        Rectangle{
+                                            // anchors.fill:parent
+                                            anchors.left:parent.left
+                                            anchors.right:parent.right
+                                            anchors.bottom:parent.bottom
+                                            height:10
+                                            // scale: parent.scale
+                                            // visible:(parent.currentIndex===4 ) || (parent.currentIndex===0) ? ( Math.abs(index-parent.currentIndex)<parent.model.count/2):true
+                                            z:-Infinity
+                                            radius:20
+                                            // color:"transparent"
+                                            layer.enabled: true
+                                            layer.effect: DropShadow {
+                                                horizontalOffset: 0
+                                                verticalOffset: 4
+                                                radius: 12
+                                                samples: 16
+                                                color: "#27272727"
+                                                z: -1
+                                            }
+                                        }
+                                    }
+                                }
+
+                                PathView {
+                                    id:pathview
+                                    anchors.fill: parent
+                                    model: TableModel {
+                                        id:credit_card
+                                        TableModelColumn {
+                                            display: "icon"
+                                        }
+                                        TableModelColumn {
+                                            display: "name"
+                                        }
+                                        rows:[
+                                            {"icon":1 , "name":'john'},
+                                            {"icon":1 , "name":'john'},
+                                            {"icon":1 , "name":'john'},
+                                            {"icon":1 , "name":'john'},
+                                            {"icon":1 , "name":'john'},
+                                            {"icon":1 , "name":'john'},
+                                            {"icon":1 , "name":'john'},
+                                            {"icon":1 , "name":'john'},
+                                            {"icon":1 , "name":'john'},
+                                        ]
+                                    }
+                                    delegate: delegate
+                                    // pathItemCount :3
+                                    // offset :1
+                                    // dragMargin: 0
+                                    // maximumFlickVelocity :150
+                                    path: Path {
+                                        // startX: show.width /2
+                                        // startY: show.height * 0.35 -20
+                                        startX: 120; startY: 100
+
+                                        PathAttribute { name: "scale"; value: 2 }
+                                        PathAttribute { name: "opacity"; value: 1.0 }
+                                        PathAttribute { name: "z"; value:(pathview.count)-1 }
+
+                                        // PathLine {
+                                        //     x: show.width/2
+                                        //     y: show.height / 2
+                                        // }
+                                        PathQuad { x: 120; y: 25; controlX: 260; controlY: 75 }
+
+
+                                        PathAttribute { name: "scale"; value:0.1}
+                                        PathAttribute { name: "opacity"; value:0.55 }
+                                        PathAttribute { name: "z"; value:0 }
+
+                                        PathQuad { x: 120; y: 100; controlX: -20; controlY: 75 }
+
+
+                                        // PathLine {
+                                        //     x: show.width * 0.3
+                                        //     y: show.height*0.4
+                                        // }
+                                        // PathAttribute { name: "z"; value:(pathview.count)-2 }
+                                        // PathAttribute { name: "scale"; value: 0.1 }
+                                        // PathAttribute { name: "opacity"; value: 0.2 }
+
+                                    }
+                                    // property real pasti:3
+                                    // property real curri:4
+                                    // onCurrentIndexChanged:{
+                                    //     pasti=curri
+                                    //     curri=currentIndex
+                                    // }
+                                            property int prevIndex: 0
+                                    // property int num: model.count
+                                    currentIndex:0
+                                    onCurrentIndexChanged: {
+                                        // console.log(count-1)
+                                        if(currentIndex === (count-1) && prevIndex === 0){
+                                            if(dragging) interactive = false;
+                                            currentIndex = 0;
+                                        }
+                                        else if(currentIndex === 0 && prevIndex === (count-1)){
+                                            if(dragging) interactive = false;
+                                            currentIndex = (count-1);
+                                        }
+
+                                        prevIndex = currentIndex
+
+                                    }
+
+                                    onDraggingChanged: {
+                                        if (dragging === false){
+                                            interactive = true
+                                        }
+                                    }
+
+                                    // snapMode: PathView.SnapToItem
+                                    // preferredHighlightBegin: 0.3
+                                    // preferredHighlightEnd: 0.7
+                                    // highlightRangeMode: PathView.StrictlyEnforceRang
                                 }
                             }
                             Item{

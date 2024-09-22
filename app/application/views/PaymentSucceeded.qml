@@ -12,7 +12,7 @@ import Components 1.0
 ColumnLayout{
     spacing:10
     required property var search_acc_info 
-    required property real amountToPay 
+    required property real amount 
     required property string description 
     required property string transaction_id 
     objectName:'PaymentSucceeded'
@@ -39,7 +39,7 @@ ColumnLayout{
             }
             Text {
                 Layout.alignment:Qt.AlignCenter
-                text: qsTranslate('',"Money Sent")
+                text: "Payment "+(payment_type==="Transfer"?"":"Request")+" was Sent"
                 horizontalAlignment: Text.AlignLeft
                 wrapMode: Text.WordWrap
                 font.family: Fonts.inter
@@ -52,7 +52,7 @@ ColumnLayout{
                 Layout.preferredWidth:parent.width
                 Layout.alignment:Qt.AlignCenter
                 textFormat: Text.RichText
-                text: "Payment <b>"+transaction_id+"</b> of <b>USD "+Number(amountToPay).toLocaleString(Qt.locale())+" $</b> was sent to <b>"+search_acc_info.full_name+"</b>"
+                text: "Payment "+(payment_type==="Transfer"?"":"Request")+" <b>"+transaction_id+"</b> of <b>USD "+Number(amount).toLocaleString(Qt.locale())+" $</b> was sent to <b>"+search_acc_info.full_name+"</b>"
                 horizontalAlignment: Text.AlignHCenter
                 wrapMode: Text.WordWrap
                 font.family: Fonts.inter

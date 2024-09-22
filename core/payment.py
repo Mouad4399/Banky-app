@@ -103,3 +103,63 @@ def amount_transfer_process(request):
 
     else:
         return Response({'detail':'errour occured ,Try again '},status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def amount_request_process(request):
+
+    if request.method == "POST":
+        # receiver information
+        receiver_account = Account.objects.get(account_number=request.data.get('account_number'))
+        receiver = receiver_account.user 
+        # sender information
+        sender = request.user 
+        sender_account = request.user.account 
+        
+        pin_number= request.data.get('pin_number')
+        amount = request.data.get("amount")
+        amount=Decimal(amount)
+        description = request.data.get("description")
+        
+        if not (pin_number == sender_account.pin_number):
+            return Response({'detail':"Incorrect Pin."}, status=status.HTTP_400_BAD_REQUEST)
+        
+        new_transaction = Transaction.objects.create(
+            user=request.user,
+            amount=amount,
+            description=description,
+            receiver=receiver,
+            sender=sender,
+            sender_account=sender_account,
+            receiver_account=receiver_account,
+            status="processing",
+            transaction_type="request"
+        )
+        new_transaction.save()
+        
+
+        new_transaction.status = "completed"
+        new_transaction.save()
+        
+        # Create Notification Object
+        # Notification.objects.create(
+        #     amount=new_transaction.amount,
+        #     user=account.user,
+        #     notification_type="Credit Alert"
+        # )
+        
+        # Notification.objects.create(
+        #     user=sender,
+        #     notification_type="Debit Alert",
+        #     amount=new_transaction.amount
+        # )
+
+        return Response({'transaction_id':new_transaction.transaction_id}, status=status.HTTP_200_OK)
+
+
+    else:
+        return Response({'detail':'errour occured ,Try again '},status=status.HTTP_400_BAD_REQUEST)
