@@ -23,7 +23,7 @@ Rectangle {
 
 
     required property var transaction_request
-    property var type_icon:{"sent":"image://img/sent_money.svg","received":"image://img/received_money.svg","sent_request":"image://img/sent_request.svg","received_request":"image://img/received_request.svg"}
+    property var type_icon:{"sent":"image://img/sent_money.svg","received":"image://img/received_money.svg","sent_requests":"image://img/sent_request.svg","received_requests":"image://img/received_request.svg"}
 
     onTransaction_requestChanged:{
         sendRequest()
@@ -175,7 +175,7 @@ Rectangle {
             boundsBehavior: Flickable.StopAtBounds
             
 
-            flickableDirection: Flickable.HorizontalFlick
+            // flickableDirection: Flickable.HorizontalFlick
             ScrollBar_.horizontal: ScrollBar_ {
                 // parent: tableView
                 // anchors.top:parent.top
@@ -273,6 +273,7 @@ Rectangle {
                             anchors.leftMargin: 20
                             anchors.verticalCenter: parent.verticalCenter
                             scale: row === tableView.pressedRow ? 1.05 : 1.0
+                            spacing:10
                             Behavior on scale {
                                 NumberAnimation {
                                     duration: 200
@@ -280,6 +281,7 @@ Rectangle {
                                 }
                             }
                             ColorImage{
+                                Layout.alignment:Qt.AlignTop
                                 source:type_icon[tableView.model.getRow(row).type]
                             }
                             ColumnLayout{

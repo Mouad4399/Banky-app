@@ -20,18 +20,23 @@ def get_transactions(request):
         serializer = AllTransactionSerializer(records,many=True,context={'user':request.user})
         return Response(serializer.data,status=status.HTTP_200_OK)
     elif transaction_type== "sent":
-        records = Transaction.objects.filter(sender=request.user).order_by("-date").distinct()
+        records = Transaction.objects.filter(sender=request.user,transaction_type='transfer').order_by("-date").distinct()
         serializer = SentTransactionSerializer(records,many=True,context={'type':transaction_type})
         return Response(serializer.data,status=status.HTTP_200_OK)
     elif transaction_type=='received':
-        records = Transaction.objects.filter(receiver=request.user).order_by("-date").distinct()
+        records = Transaction.objects.filter(receiver=request.user,transaction_type='transfer').order_by("-date").distinct()
         serializer = ReceivedTransactionSerializer(records,many=True,context={'type':transaction_type})
         return Response(serializer.data,status=status.HTTP_200_OK)
         
-    # elif transaction_type == 'sent_request':
-
+    elif transaction_type == 'sent_requests':
+        records = Transaction.objects.filter(sender=request.user,transaction_type='request').order_by("-date").distinct()
+        serializer = SentTransactionSerializer(records,many=True,context={'type':transaction_type})
+        return Response(serializer.data,status=status.HTTP_200_OK)
         
-    # elif transaction_type == 'received_request':
+    elif transaction_type == 'received_requests':
+        records = Transaction.objects.filter(receiver=request.user,transaction_type='request').order_by("-date").distinct()
+        serializer = ReceivedTransactionSerializer(records,many=True,context={'type':transaction_type})
+        return Response(serializer.data,status=status.HTTP_200_OK)
     
     return Response({},status=status.HTTP_404_NOT_FOUND)
 

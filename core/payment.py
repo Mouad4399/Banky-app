@@ -142,7 +142,7 @@ def amount_request_process(request):
         new_transaction.save()
         
 
-        new_transaction.status = "completed"
+        new_transaction.status = "request_sent"
         new_transaction.save()
         
         # Create Notification Object

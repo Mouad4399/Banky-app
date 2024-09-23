@@ -32,7 +32,7 @@ class AllTransactionSerializer(serializers.ModelSerializer):
             if obj.transaction_type == 'transfer':
                 return 'sent' if obj.sender == self.context.get('user') else 'received'
             else:
-                return 'sent_request' if obj.sender == self.context.get('user') else 'received_request'
+                return 'sent_requests' if obj.sender == self.context.get('user') else 'received_requests'
         except:
             return None
 
