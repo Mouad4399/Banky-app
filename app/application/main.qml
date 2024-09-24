@@ -327,9 +327,9 @@ ApplicationWindow {
             clip: true
             initialItem: "./views/Dashboard.qml"
             
-            function replaceIfReady(path){
+            function replaceIfReady(path,attr){
                 if(currentItem.isReadyToLeave()){
-                    stack.replace(path);
+                    stack.replace(path,attr);
                     return ;
                 }
                 currentItem.notReadyToLeavePopup.accepted.connect(function replaceReady(){

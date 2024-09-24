@@ -66,7 +66,7 @@ Rectangle {
             Layout.topMargin:1
             implicitHeight: 40
             implicitWidth: parent.implicitWidth
-            model: ["Transaction","Name/Business","Amount","Date","Status"]
+            model: ["Transaction","Name/Business","Amount","Date","Status","Action"]
             boundsBehavior: Flickable.StopAtBounds
 
             Rectangle {
@@ -229,6 +229,7 @@ Rectangle {
                 y:((tableView.height)/2) - height/2
                 spacing:10
                 property bool notFound:tableView.rows.length ===0
+                z:Infinity
                 // anchors.centerIn:parent
                 Item{
                     Layout.fillHeight:true
@@ -315,6 +316,7 @@ Rectangle {
                 DelegateChoice {
                     column: 1
                     delegate: TableRow{
+                        implicitWidth:TableView.view.width * 15/100
                         Text {
                             text:  display
                             scale: row === tableView.pressedRow ? 1.05 : 1.0
@@ -341,6 +343,7 @@ Rectangle {
                 DelegateChoice {
                     column: 2
                     delegate: TableRow{
+                        implicitWidth:TableView.view.width * 10/100
                         Text {
                             text:  Number(display).toLocaleString(Qt.locale()) + " $"
                             scale: row === tableView.pressedRow ? 1.05 : 1.0
@@ -428,6 +431,81 @@ Rectangle {
                                 radius:height/2
                                 color:"#f0fff3"
 
+                            }
+                        }
+
+                    }
+                }
+                DelegateChoice {
+                    column: 5
+                    delegate: TableRow{
+                        implicitWidth:TableView.view.width * 15/100
+                        RowLayout{
+                            anchors.left: parent.left
+                            anchors.leftMargin: 10
+                            // anchors.left:parent.left
+                            // anchors.right:parent.right
+                            anchors.verticalCenter: parent.verticalCenter
+                            spacing:5
+                            Item{
+                                Layout.fillWidth:true
+                            }
+                            Button_{
+                                // Layout.alignment:Qt.AlignCenter
+                                visible:(tableView.model.getRow(row).status!== 'request_settled')&&(tableView.model.getRow(row).type==='received_requests')
+                                buttonText:'Settle'
+                                enabledEffect:true
+                                disabledBgColor:"#ccc"
+                                Layout.preferredWidth:innerText.width + 10*2
+                                // Layout.preferredHeight:innerText.hight + 15*2
+                                height:25
+                                color: "#065AD8"
+                                textColor: "white" 
+                                fontWeight:600
+                                fontSize:10
+                                onClicked:{
+                                    var search_acc_info;
+                                    // console.log(transaction_request.type === 'all'?tableView.model.getRow(row).sender_account:tableView.model.getRow(row).account_id)
+                                    // console.log(transaction_request.type)
+                                    window.getAttr('search_acc').finished.connect(function search_acc_slot(code , json){
+                                                                                    // busypopup.close()
+                                                                                    if(code !== 200){
+                                                                                        console.log('something wrong ! , ' + transaction_request.type === 'all'?tableView.model.getRow(row).sender_account_id:tableView.model.getRow(row).account_id)
+                                                                                        return
+                                                                                    }
+                                                                                    search_acc_info=json
+                                                                                    
+                                                                                    stack.replaceIfReady('./views/Payment.qml',{'helperFunction':function (){
+                                                                                                                                this.stepsStack.push('./PaymentThirdStep.qml',{'search_acc_info':search_acc_info,
+                                                                                                                                                                            'amount':Number(tableView.model.getRow(row).amount),
+                                                                                                                                                                            'description':tableView.model.getRow(row).description,
+                                                                                                                                                                            'payment_type':'Settlement',
+                                                                                                                                                                            'transaction_id':tableView.model.getRow(row).transaction_id,
+                                                                                                                                                                            })}})
+                                                                                    window.getAttr('search_acc').finished.disconnect(search_acc_slot)
+                                                                                });
+                                    window.getAttr('search_acc').sendRequest({
+                                        'account_id_or_number':transaction_request.type === 'all'?tableView.model.getRow(row).sender_account_id:tableView.model.getRow(row).account_id})
+
+
+                                }                                
+                            }
+                            Button_{
+                                // Layout.alignment:Qt.AlignCenter
+                                visible:(tableView.model.getRow(row).status!== 'request_settled')&&(tableView.model.getRow(row).type ==='sent_requests' || tableView.model.getRow(row).type ==='received_requests')
+                                buttonText:'Cancle'
+                                enabledEffect:true
+                                disabledBgColor:"#ccc"
+                                Layout.preferredWidth:innerText.width + 10*2
+                                // Layout.preferredHeight:innerText.hight + 15*2
+                                height:25
+                                color: "#e04a47"
+                                textColor: "white" 
+                                fontWeight:600
+                                fontSize:10  
+                            }
+                            Item{
+                                Layout.fillWidth:true
                             }
                         }
 

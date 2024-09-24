@@ -17,6 +17,9 @@ Rectangle{
     objectName:"Payment"
     color:"#eff1fc"
 
+    property var helperFunction:function (){}
+    property alias stepsStack: stepsStack
+
     function isReadyToLeave(){
         return (stepsStack.depth<=1 || stepsStack.currentItem.objectName==="PaymentSucceeded")
     
@@ -238,6 +241,7 @@ Rectangle{
 
 
     Component.onCompleted:{
+        helperFunction()
         // busypopup.open()
         window.getAttr('get_acc').finished.connect(function get_acc_slot(code , json){
             window.getAttr('get_acc').finished.disconnect(get_acc_slot)

@@ -15,6 +15,9 @@ ColumnLayout{
     required property real amount 
     required property string description 
     required property string payment_type
+
+    // in case of Settlement
+    property string transaction_id
     ColorImage {
         Layout.alignment: Qt.AlignLeft | Qt.AlignTop
         source: 'data:image/svg+xml;utf8,<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 11V13H7.99997L13.5 18.5L12.08 19.92L4.15997 12L12.08 4.08L13.5 5.5L7.99997 11H20Z" fill="#699BF7"/></svg>'
@@ -193,12 +196,12 @@ ColumnLayout{
 
                     Repeater{
                         model:[
-                            'You '+(payment_type==="Transfer"?"Send":"Receive"),
-                            payment_type==="Transfer"?'Recipient gets' :'Recipient is request of',
+                            'You '+({"Transfer":"Send","Request":"Receive","Settlement":"Pay"}[payment_type]),
+                            {"Transfer":'Recipient gets',"Request":'Recipient is requested of',"Settlement":'Recipient asks for'}[payment_type],
                             'E-mail of receiver',
                             'Fee',
                             'Purpose',
-                            payment_type+ ' will be receive on',
+                            payment_type+ ' will be received on',
                             ]
                         delegate:Text {
                             Layout.column:0
@@ -266,16 +269,21 @@ ColumnLayout{
     }
     Button_{
         enabled:confirm_checkbox.checked
+        enabledEffect:true
         disabledBgColor:"#ccc"
         Layout.alignment:Qt.AlignRight
         Layout.preferredWidth:innerText.width + 48*2
         height:35
-        buttonText:confirm_checkbox.checked ? "Next":"confirm the Payment to proceed"
+        buttonText:confirm_checkbox.checked ? "Next":"confirm the payment to proceed"
         color: "#065AD8"
         textColor: confirm_checkbox.checked ?"white":"#666"
         fontWeight:600
         fontSize:10
         onClicked:{
+            if(amount>user_acc_info.account_balance){
+                toastmanager.show(false,"Payment Process :" ,"Your account balance is not enough for this operation ! ")
+                return;
+            }
             dialog.open()
         }
     }
@@ -538,13 +546,12 @@ ColumnLayout{
                             }
                             // console.log(pin_number)
                             
-
-                            window.getAttr(payment_type==="Transfer"?'transfer_amount':'request_amount').finished.connect(function payment_process_slot(code , json){
+                            window.getAttr({"Transfer":'transfer_amount',"Request":'request_amount',"Settlement":'settlement'}[payment_type]).finished.connect(function payment_process_slot(code , json){
                                 busypopup.close()
                                 if(code !== 200){
                                     errorMessage.visible=true
                                 }else{
-                                    toastmanager.show(true,"Payment Process :" ,"your "+(payment_type==="Transfer"?"Payment":"Request")+" of USD <b>"+amount+"</b>$ sent to <b>"+search_acc_info.full_name+"</b> was successfully completed")
+                                    toastmanager.show(true,"Payment Process :" ,"your "+({"Transfer":"Payment","Request":"Request","Settlement":"Settlement"}[payment_type])+" of USD <b>"+amount+"</b>$ sent to <b>"+search_acc_info.full_name+"</b> was successfully completed")
                                     dialog.accept();
                                     stepsStack.push('./PaymentSucceeded.qml',{'search_acc_info':search_acc_info,
                                                     'amount':Number(amount),
@@ -552,15 +559,24 @@ ColumnLayout{
                                                     'transaction_id':json.transaction_id
                                                     })
                                 }
-                                window.getAttr(payment_type==="Transfer"?'transfer_amount':'request_amount').finished.disconnect(payment_process_slot)
+                                window.getAttr({"Transfer":'transfer_amount',"Request":'request_amount',"Settlement":'settlement'}[payment_type]).finished.disconnect(payment_process_slot)
                             });
                             busypopup.open()
-                            window.getAttr(payment_type==="Transfer"?'transfer_amount':'request_amount').sendRequest( {
+                            window.getAttr({"Transfer":'transfer_amount',"Request":'request_amount',"Settlement":'settlement'}[payment_type]).sendRequest( 
+                                {"Transfer":{
                                 'account_number':search_acc_info.account_number,
                                 'amount':amount ,
                                 'pin_number':pin_number,
                                 'description':description
-                                })  
+                                },"Request":{
+                                'account_number':search_acc_info.account_number,
+                                'amount':amount ,
+                                'pin_number':pin_number,
+                                'description':description
+                                },"Settlement":{
+                                'transaction_id':transaction_id,
+                                'pin_number':pin_number,
+                                }}[payment_type])  
 
                             pin_number=""
                         }

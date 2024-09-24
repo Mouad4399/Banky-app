@@ -556,7 +556,7 @@ Rectangle{
                 TransactionTable{
                     id:transaction_table
                     transaction_request:typeRow.transaction_request
-                    horizontalHeader.model:["Transaction","Name/Business","Amount","Date","Status"]
+                    horizontalHeader.model:["Transaction","Name/Business","Amount","Date","Status","Action"]
                     tableView.model:TableModel {
                         id: employeeModel
                         TableModelColumn {
@@ -574,8 +574,12 @@ Rectangle{
                         TableModelColumn {
                             display: "status"
                         }
+                        // a trick to add an new column and use it for actions in case no data needed
+                        TableModelColumn {
+                            // action column
+                            display: "type"
+                        }
 
-                        // rows:[{'transaction_id': 'TRNa5wb95Hc8MFS2Yj', 'sender_account': 'b97c2142-dd36-40e1-8951-491aa4ea2143', 'receiver_account': '0c5e46c0-1661-4e1b-8091-e1831d4a3b00', 'full_name': 'Mouad Ait Ougrram', 'amount': '10.55', 'date': '2024-09-09T21:55:02.584985Z', 'status': 'completed', 'transaction_type': 'transfer', 'type': 'sent'}, {'transaction_id': 'TRNZ3uKx7MGbfoDEye', 'sender_account': '0c5e46c0-1661-4e1b-8091-e1831d4a3b00', 'receiver_account': 'b97c2142-dd36-40e1-8951-491aa4ea2143', 'full_name': 'Mouad Ait Ougrram', 'amount': '54.34', 'date': '2024-09-09T21:53:20.300615Z', 'status': 'completed', 'transaction_type': 'transfer', 'type': 'received'}]
                     }
                 }
             }

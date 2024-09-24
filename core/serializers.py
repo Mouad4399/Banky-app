@@ -16,9 +16,11 @@ class KYCSearchSerializer(serializers.ModelSerializer):
 class AllTransactionSerializer(serializers.ModelSerializer):
     type = serializers.SerializerMethodField()
     full_name = serializers.SerializerMethodField()
+    sender_account_id = serializers.UUIDField(source='sender_account.account_id', read_only=True)  # Assuming account_id exists
+    receiver_account_id = serializers.UUIDField(source='receiver_account.account_id', read_only=True)  # Assuming account_id exists
     class Meta:
         model = Transaction
-        fields = ['transaction_id','sender_account','receiver_account','full_name','amount','date','status','transaction_type','type']
+        fields = ['transaction_id','sender_account_id','receiver_account_id','full_name','amount','date','status','transaction_type','description','type']
         
     def get_full_name(self, obj):
         try:
@@ -42,7 +44,7 @@ class SentTransactionSerializer(serializers.ModelSerializer):
     full_name =serializers.SerializerMethodField()
     class Meta:
         model = Transaction
-        fields = ['transaction_id','full_name','account_id','amount','date','status','transaction_type','type']
+        fields = ['transaction_id','full_name','account_id','amount','date','status','transaction_type','description','type']
         
     def get_full_name(self, obj):
         try:
@@ -59,7 +61,7 @@ class ReceivedTransactionSerializer(serializers.ModelSerializer):
     full_name =serializers.SerializerMethodField()
     class Meta:
         model = Transaction
-        fields = ['transaction_id','full_name','account_id','amount','date','status','transaction_type','type']
+        fields = ['transaction_id','full_name','account_id','amount','date','status','transaction_type','description','type']
         
     def get_full_name(self, obj):
         try:

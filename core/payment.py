@@ -163,3 +163,45 @@ def amount_request_process(request):
 
     else:
         return Response({'detail':'errour occured ,Try again '},status=status.HTTP_400_BAD_REQUEST)
+
+
+from django.utils.timezone import now
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def settlement(request):
+    transaction = Transaction.objects.get(transaction_id=request.data.get('transaction_id'))
+    
+    # the person that sent the transaction settlement
+    account = Account.objects.get(account_id=transaction.sender_account.account_id)
+    # account = Account.objects.get(pk=transaction.sender_account)
+
+    if request.method == "POST":
+        pin_number = request.data.get("pin_number")
+        if pin_number != request.user.account.pin_number:
+            return
+        
+        if not (request.user.account.account_balance <= 0 or request.user.account.account_balance < transaction.amount):
+            request.user.account.account_balance -= transaction.amount
+            request.user.account.save()
+
+            account.account_balance += transaction.amount
+            account.save()
+
+            transaction.status = "request_settled"
+            transaction.updated=now()
+            transaction.save()
+            
+            return Response({'transaction_id':transaction.transaction_id}, status=status.HTTP_200_OK)
+    else:
+        return Response({'detail':'errour occured ,Try again '},status=status.HTTP_400_BAD_REQUEST)
+
+
+
+# def deletepaymentrequest(request, account_number ,transaction_id):
+#     account = Account.objects.get(account_number=account_number)
+#     transaction = Transaction.objects.get(transaction_id=transaction_id)
+
+#     if request.user == transaction.user:
+#         transaction.delete()
+#         messages.success(request, "Payment Request Deleted Sucessfully")
+#         return 

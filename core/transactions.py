@@ -77,23 +77,46 @@ def transactions_summary(request):
             date__range=[start_interval, end_interval]
         )
         
+        # Filter transactions within the interval for the user
+        re_transactions = Transaction.objects.filter(
+            Q(sender=request.user) | Q(receiver=request.user),
+            updated__range=[start_interval, end_interval]
+        )
+        
         # Get outcome (sent transactions) and income (received transactions)
         income = transactions.filter(
             transaction_type="transfer", 
+            status='completed',
             receiver=request.user
         ).aggregate(Sum('amount'))['amount__sum'] or 0
         
         outcome = transactions.filter(
             transaction_type="transfer", 
+            status='completed',
             sender=request.user
         ).aggregate(Sum('amount'))['amount__sum'] or 0
+        
+        
+        re_outcome = re_transactions.filter(
+            transaction_type="request", 
+            status='request_settled',
+            receiver=request.user
+        ).aggregate(Sum('amount'))['amount__sum'] or 0
+        
+        re_income = re_transactions.filter(
+            transaction_type="request", 
+            status='request_settled',
+            sender=request.user
+        ).aggregate(Sum('amount'))['amount__sum'] or 0
+        
 
         interval_data.append({
             "interval": end_interval.strftime("%Y-%m-%d"),
-            "income": income,
-            "outcome": outcome
+            "income": income + re_income,
+            "outcome": outcome+ re_outcome
         })
     
+    # print(interval_data)
     # Reverse the data to show from oldest to most recent interval
     interval_data.reverse()
 
