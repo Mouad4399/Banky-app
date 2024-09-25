@@ -25,11 +25,15 @@ ps : still under-development !!!
 
   
 - Transactions
+![image](https://github.com/user-attachments/assets/fc48fc05-79b9-4e47-9d1d-7930e879cdb0)
 
-![image](https://github.com/user-attachments/assets/5522064b-d2ac-4093-b67c-162942ce2c62)
 
 - Payment
-  
+
+![image](https://github.com/user-attachments/assets/10d78252-e033-4ef0-9db7-a538b334ff21)
+
+![image](https://github.com/user-attachments/assets/d92303af-b693-41f8-bf05-6b35d37c2c37)
+
 ![image](https://github.com/user-attachments/assets/a0111180-ec3d-4c00-a747-9810e16873c6)
 
 
