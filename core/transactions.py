@@ -40,6 +40,23 @@ def get_transactions(request):
     
     return Response({},status=status.HTTP_404_NOT_FOUND)
 
+# @api_view(['GET'])
+# @permission_classes([IsAuthenticated])
+# def get_transaction_details(request):
+#     transaction_id=request.data.get('transaction_id')
+#     if transaction_id :
+#         # always use Q for queries
+#         record = Transaction.objects.filter(Q(transaction_id=transaction_id)).distinct()
+        
+#         if not record:
+#             return Response({'detail':'Error ,Transaction not found !'},status=status.HTTP_404_NOT_FOUND)
+
+#         # I use many=True even if I need just one , otherwise it will rise error
+#         serializer = AllTransactionSerializer(record,many=True,context={'user':request.user})
+#         return Response(serializer.data,status=status.HTTP_200_OK)
+    
+#     return Response({},status=status.HTTP_404_NOT_FOUND)
+
     
 
 from django.utils.timezone import now, timedelta

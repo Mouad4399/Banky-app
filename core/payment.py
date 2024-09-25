@@ -196,12 +196,14 @@ def settlement(request):
         return Response({'detail':'errour occured ,Try again '},status=status.HTTP_400_BAD_REQUEST)
 
 
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def delete_payment_request(request):
+    # check if the transaction exists in the first place
+    transaction = Transaction.objects.get(transaction_id=request.data.get('transaction_id'))
 
-# def deletepaymentrequest(request, account_number ,transaction_id):
-#     account = Account.objects.get(account_number=account_number)
-#     transaction = Transaction.objects.get(transaction_id=transaction_id)
+    if request.user == transaction.sender:
+        transaction.delete()
+        return Response({'transaction_id':transaction.transaction_id}, status=status.HTTP_200_OK)
 
-#     if request.user == transaction.user:
-#         transaction.delete()
-#         messages.success(request, "Payment Request Deleted Sucessfully")
-#         return 
+    return Response({'detail':'you are not allowed , because you are not the sender'}, status=status.HTTP_400_BAD_REQUEST)

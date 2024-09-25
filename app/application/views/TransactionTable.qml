@@ -228,7 +228,7 @@ Rectangle {
                 x:((tableView.width)/2) - width/2
                 y:((tableView.height)/2) - height/2
                 spacing:10
-                property bool notFound:tableView.rows.length ===0
+                property bool notFound:tableView.model.rows.length ===0
                 z:Infinity
                 // anchors.centerIn:parent
                 Item{
@@ -468,21 +468,21 @@ Rectangle {
                                     // console.log(transaction_request.type === 'all'?tableView.model.getRow(row).sender_account:tableView.model.getRow(row).account_id)
                                     // console.log(transaction_request.type)
                                     window.getAttr('search_acc').finished.connect(function search_acc_slot(code , json){
-                                                                                    // busypopup.close()
-                                                                                    if(code !== 200){
-                                                                                        console.log('something wrong ! , ' + transaction_request.type === 'all'?tableView.model.getRow(row).sender_account_id:tableView.model.getRow(row).account_id)
-                                                                                        return
-                                                                                    }
-                                                                                    search_acc_info=json
-                                                                                    
-                                                                                    stack.replaceIfReady('./views/Payment.qml',{'helperFunction':function (){
-                                                                                                                                this.stepsStack.push('./PaymentThirdStep.qml',{'search_acc_info':search_acc_info,
-                                                                                                                                                                            'amount':Number(tableView.model.getRow(row).amount),
-                                                                                                                                                                            'description':tableView.model.getRow(row).description,
-                                                                                                                                                                            'payment_type':'Settlement',
-                                                                                                                                                                            'transaction_id':tableView.model.getRow(row).transaction_id,
-                                                                                                                                                                            })}})
-                                                                                    window.getAttr('search_acc').finished.disconnect(search_acc_slot)
+                                        // busypopup.close()
+                                        if(code !== 200){
+                                            console.log('something wrong ! , ' + transaction_request.type === 'all'?tableView.model.getRow(row).sender_account_id:tableView.model.getRow(row).account_id)
+                                            return
+                                        }
+                                        search_acc_info=json
+                                        
+                                        stack.replaceIfReady('./views/Payment.qml',{'helperFunction':function (){
+                                                                                    this.stepsStack.push('./PaymentThirdStep.qml',{'search_acc_info':search_acc_info,
+                                                                                                                                'amount':Number(tableView.model.getRow(row).amount),
+                                                                                                                                'description':tableView.model.getRow(row).description,
+                                                                                                                                'payment_type':'Settlement',
+                                                                                                                                'transaction_id':tableView.model.getRow(row).transaction_id,
+                                                                                                                                })}})
+                                        window.getAttr('search_acc').finished.disconnect(search_acc_slot)
                                                                                 });
                                     window.getAttr('search_acc').sendRequest({
                                         'account_id_or_number':transaction_request.type === 'all'?tableView.model.getRow(row).sender_account_id:tableView.model.getRow(row).account_id})
@@ -502,8 +502,28 @@ Rectangle {
                                 color: "#e04a47"
                                 textColor: "white" 
                                 fontWeight:600
-                                fontSize:10  
+                                fontSize:10 
+                                onClicked:{
+                                    window.getAttr('search_acc').finished.connect(function search_acc_slot(code , json){
+                                        // busypopup.close()
+                                        if(code !== 200){
+                                            console.log('something wrong ! , ' + transaction_request.type === 'all'?tableView.model.getRow(row).sender_account_id:tableView.model.getRow(row).account_id)
+                                            return
+                                        }
+                                        dialog.search_acc_info =json
+                                        dialog.amount=Number(tableView.model.getRow(row).amount)
+                                        dialog.description=tableView.model.getRow(row).description
+                                        dialog.payment_type='Request'
+                                        dialog.transaction_id=tableView.model.getRow(row).transaction_id
+                                        window.getAttr('search_acc').finished.disconnect(search_acc_slot)
+                                        dialog.open()
+                                    });
+                                    window.getAttr('search_acc').sendRequest({
+                                        'account_id_or_number':transaction_request.type === 'all'?tableView.model.getRow(row).receiver_account_id:tableView.model.getRow(row).account_id})
+
+                                }
                             }
+
                             Item{
                                 Layout.fillWidth:true
                             }
@@ -709,6 +729,328 @@ Rectangle {
             // root.requestPage(pagination.currentPage)
             // // console.log('b2')
         }
+    }
+
+    
+    Dialog {
+        id: dialog
+        property var search_acc_info :{'email':''}
+        property real amount 
+        property string description 
+        property string payment_type
+        property string transaction_id
+
+        width: contentDialog.implicitWidth
+        height: contentDialog.implicitHeight
+        padding: 0
+        parent:stack
+        x: parent.width / 2 - width / 2
+        y: parent.height / 2 - height / 2
+
+        // property string imageToSend:''
+        // property string audioToSend:''
+
+        onAccepted:
+        {
+        }
+
+        onClosed: {
+        }
+
+        // topPadding: 0
+
+        enter: Transition {
+            // grow_fade_in
+            NumberAnimation {
+                property: "scale"
+                from: 0.9
+                to: 1.0
+                easing.type: Easing.OutQuint
+                duration: 220
+            }
+            NumberAnimation {
+                property: "opacity"
+                from: 0.0
+                to: 1.0
+                easing.type: Easing.OutCubic
+                duration: 150
+            }
+        }
+
+        exit: Transition {
+            // shrink_fade_out
+            NumberAnimation {
+                property: "scale"
+                from: 1.0
+                to: 0.9
+                easing.type: Easing.OutQuint
+                duration: 220
+            }
+            NumberAnimation {
+                property: "opacity"
+                from: 1.0
+                to: 0.0
+                easing.type: Easing.OutCubic
+                duration: 150
+            }
+        }
+
+        modal: true
+
+        background: Rectangle {
+            anchors.fill: parent
+            // color:"red"
+            radius: 12
+            layer.enabled: true
+            layer.effect: DropShadow {
+                horizontalOffset: 0
+                verticalOffset: 4
+                radius: 12
+                samples: 16
+                color: "#100B2714"
+                z: -1
+            }
+        }
+        contentItem:Rectangle {
+            // anchors.fill: parent
+            id: contentDialog
+            default property alias data: col.data
+            implicitWidth: col.width + 40
+            implicitHeight: col.height+40
+            radius: 12
+            // color: "white"
+            color: Qt.rgba(0,0,0,0)
+
+            ColumnLayout {
+                id: col
+                // width: 420
+                width:460
+                anchors.centerIn: parent
+                // anchors.horizontalCenter:parent.horizontalCenter
+
+                spacing: 10
+
+                ColorImage {
+                    id: closebtn
+                    Layout.alignment: Qt.AlignRight | Qt.AlignTop
+                    source: "image://img/close_icon.svg"
+                    sourceSize.width:18
+                    color: 'black'
+                    Rectangle {
+                        // id:closebtn_rect
+                        anchors.centerIn: parent
+                        width: parent.width + 4
+                        height: width
+                        color: Qt.rgba(0, 0, 0, 0)
+                        radius: width / 2
+                        z: -1
+
+                        MouseArea {
+                            anchors.fill: parent
+                            hoverEnabled: true
+                            onEntered: {
+                                parent.border.color = "#065AD8";
+                            }
+                            onExited: {
+                                parent.border.color = Qt.rgba(0, 0, 0, 0);
+                            }
+                            onClicked: {
+                                dialog.close();
+                            }
+                        }
+                    }
+                }
+                // Item {
+                //     Layout.fillWidth: true
+                //     Layout.fillHeight: true
+                // }
+
+                ColumnLayout {
+                    // Layout.fillWidth: true
+                    Layout.alignment: Qt.AlignLeft
+                    spacing: 10
+                    Text {
+                        Layout.fillWidth: true
+                        Layout.alignment: Qt.AlignLeft
+                        text: qsTranslate('',"Delete the request ?")
+                        horizontalAlignment: Text.AlignLeft
+                        wrapMode: Text.WordWrap
+                        font.family: Fonts.inter
+                        font.pointSize: 17
+                        font.weight: 900
+                        color: "black"
+                    }
+                    Text {
+                        Layout.alignment: Qt.AlignLeft
+                        Layout.maximumWidth:parent.parent.width -40
+                        text: qsTranslate('',"You are about to delete this request , do you want to Discard ? ")
+                        horizontalAlignment: Text.AlignLeft
+                        wrapMode: Text.WordWrap
+                        font.family: Fonts.inter
+                        font.pointSize: 10
+                        font.weight: 600
+                        color: "#787878"
+                    }
+                    
+                }
+                Rectangle{
+                    height:250
+                    Layout.fillWidth:true
+                    color:"#eff1fc"
+                    radius:9
+                    // border.width:1
+                    // border.color:"#121b28"
+                    ColumnLayout{
+                        anchors.fill:parent
+                        anchors.margins:15
+                        spacing:10
+                        Item{
+                            Layout.fillHeight:true
+                        }
+                        Text {
+                            Layout.fillWidth: true
+                            Layout.alignment: Qt.AlignLeft
+                            text: qsTranslate('',"Payment Details")
+                            horizontalAlignment: Text.AlignLeft
+                            wrapMode: Text.WordWrap
+                            font.family: Fonts.inter
+                            font.pointSize: 11
+                            font.weight: 900
+                            color: "#121b28"
+                            
+                        }
+                        Rectangle{
+                            Layout.fillWidth:true
+                            height:1
+                            color: "#AEAFB3"
+                        }
+                        RowLayout{
+                            Layout.fillWidth:true
+                            Layout.fillHeight:true
+                            GridLayout{
+                                // Layout.fillWidth:true
+                                Layout.fillHeight:true
+                                columns:2
+                                rowSpacing:10
+                                columnSpacing:40
+
+                                Repeater{
+                                    model:[
+                                        'You '+({"Transfer":"Send","Request":"Receive","Settlement":"Pay"}[dialog.payment_type]),
+                                        {"Transfer":'Recipient gets',"Request":'Recipient is requested of',"Settlement":'Recipient asks for'}[dialog.payment_type],
+                                        'E-mail of receiver',
+                                        'Fee',
+                                        'Purpose',
+                                        dialog.payment_type+ ' will be received on',
+                                        ]
+                                    delegate:Text {
+                                        Layout.column:0
+                                        Layout.row:index
+                                        // Layout.fillWidth: true
+                                        Layout.alignment: Qt.AlignLeft
+                                        text: modelData + " : "
+                                        horizontalAlignment: Text.AlignLeft
+                                        wrapMode: Text.WordWrap
+                                        font.family: Fonts.inter
+                                        font.pointSize: 10
+                                        font.weight: 600
+                                        color: "#444"
+                                    }
+                                }
+                                Repeater{
+                                    model:[
+                                        "USD "+dialog.amount.toLocaleString(Qt.locale())+"$",
+                                        "USD "+dialog.amount.toLocaleString(Qt.locale())+"$",
+                                        dialog.search_acc_info.email,
+                                        'Free',
+                                        dialog.description,
+                                        Qt.formatDate(new Date(), "dd MMM yyyy"),
+                                        ]
+                                    delegate:Text {
+                                        Layout.column:1
+                                        Layout.row:index
+                                        // Layout.fillWidth: true
+                                        Layout.alignment: Qt.AlignLeft
+                                        text: modelData
+                                        horizontalAlignment: Text.AlignLeft
+                                        wrapMode: Text.WordWrap
+                                        font.family: Fonts.inter
+                                        font.pointSize: 10
+                                        font.weight: 900
+                                        color:"#121b28"
+                                    }
+                                }
+                            }
+                            Item{
+                                Layout.fillWidth:true
+                                Layout.fillHeight:true
+                            }
+                        }
+                        Item{
+                            Layout.fillHeight:true
+                        }
+                    }
+                }
+                RowLayout{
+                    // Layout.fillWidth:true
+                    Layout.alignment: Qt.AlignRight
+                    Layout.topMargin:15
+                    spacing: 15
+                    Item{
+                        Layout.fillWidth:true
+                    }
+                    Button_ {
+                        // Layout.alignment: Qt.AlignCenter
+                        // Layout.fillWidth:true
+                        // implicitWidth: 140
+                        width:innerText.width + 16*2
+                        height:35
+                        // width:Layout.preferredWidth
+                        // height: 45
+                        buttonText: qsTranslate('',"Discard")
+                        textColor:'#121B28'
+                        fontWeight: 700
+                        fontSize:11
+                        color:'white'
+                        borderWidth:1
+                        borderColor:'#121B28'
+                        onClicked: {
+                            dialog.reject();
+                        }
+                    }
+                    Button_ {
+                        // Layout.alignment: Qt.AlignCenter
+                        // Layout.fillWidth:true
+                        // width:Layout.preferredWidth
+                        // height: 45
+                        width:innerText.width + 16*2
+                        height:35
+                        buttonText: qsTranslate('',"Delete")
+                        fontSize:11
+                        fontWeight: 700
+                        color:"#d32f2f"
+                        onClicked: {
+                            window.getAttr('delete_request').finished.connect(function delete_request_slot(code , json){
+                                // busypopup.close()
+                                if(code !== 200){
+                                    // console.log('something wrong ! , ' + transaction_request.type === 'all'?tableView.model.getRow(row).receiver_account_id:tableView.model.getRow(row).account_id)
+                                    toastmanager.show(false,"Delete Payment Request Process :" ,"Your Request of <b>"+json.transaction_id+"</b> was not Deleted ! ")
+                                    return
+                                }
+                                toastmanager.show(true,"Delete Payment Request Process :" ,"Your Request of <b>"+json.transaction_id+"</b> was successfully Deleted ! ")
+                                
+                                window.getAttr('delete_request').finished.disconnect(delete_request_slot)
+                                dialog.accept();
+                            });
+                            window.getAttr('delete_request').sendRequest({
+                                'transaction_id':dialog.transaction_id
+                            })
+                        }
+                    }
+                }
+            }
+        }
+
     }
 }
 
