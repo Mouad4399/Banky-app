@@ -747,13 +747,189 @@ Rectangle{
                                     ColorImage{
                                         width:71
                                         height:45
-                                        source:"image://img/credit_card_"+((index%6)+1)+".svg"
+                                        source:"image://img/credit_card_visa_"+((index%5))+".png"
                                         visible:(pathview.currentIndex===(pathview.count-1))  || (pathview.currentIndex===0) ? ( Math.abs(index-pathview.currentIndex)<(pathview.count)/2):( Math.abs(index-pathview.currentIndex)<(pathview.count)/4)
 
                                         id: wrapper
                                         required property int index
                                         opacity: PathView.opacity
                                         scale: PathView.scale
+
+
+                                        Text{
+                                            // id:test
+                                            scale:0.5
+                                            font.family:Fonts.inter
+                                            text:'Card Holder Name'
+                                            font.pointSize:4
+                                            color:'white'
+                                            x: -5.5  ; y:  32
+                                            
+                                            
+                                        }
+                                        Text{
+                                            // id:test
+                                            scale:0.5
+                                            font.family:Fonts.inter
+                                            text:'Mouad Ait Ougrram'
+                                            font.pointSize:4.5
+                                            color:'white'
+                                            font.weight:700
+                                            // color:'white'
+                                            x: -8.5  ; y: 35
+                                            // DragHandler {
+                                            //     onGrabChanged:(transition, eventPoint) => {
+
+
+                                            //         switch (eventPoint.state) {
+                                            //             case EventPoint.Pressed:
+                                            //                 console.log("on press @", eventPoint.position);
+                                            //                 break
+                                            //             case EventPoint.Updated:
+                                            //                 console.log("on update @", eventPoint.position);
+                                            //                 break
+                                            //             case EventPoint.Released:
+                                            //                 console.log("on release @", test.x," ; " ,test.y);
+                                            //                 break
+                                            //             default:
+                                            //                 console.log(eventPoint.position, "state", eventPoint.state)
+                                            //                 break
+                                            //         }
+                                            //     }
+                                            // }
+                                            
+                                            
+                                        }
+                                        Text{
+                                            // id:test
+                                            scale:0.5
+                                            font.family:Fonts.inter
+                                            text:'Expiry Date'
+                                            font.pointSize:4
+                                            color:'white'
+                                            x: 45.25  ; y: 31.5
+                                            // DragHandler {
+                                            //     onGrabChanged:(transition, eventPoint) => {
+
+
+                                            //         switch (eventPoint.state) {
+                                            //             case EventPoint.Pressed:
+                                            //                 console.log("on press @", eventPoint.position);
+                                            //                 break
+                                            //             case EventPoint.Updated:
+                                            //                 console.log("on update @", eventPoint.position);
+                                            //                 break
+                                            //             case EventPoint.Released:
+                                            //                 console.log("on release @", test.x," ; " ,test.y);
+                                            //                 break
+                                            //             default:
+                                            //                 console.log(eventPoint.position, "state", eventPoint.state)
+                                            //                 break
+                                            //         }
+                                            //     }
+                                            // }
+                                            
+                                        }
+                                        Text{
+                                            // id:test
+                                            scale:0.5
+                                            font.family:Fonts.inter
+                                            text:'07/12'
+                                            font.pointSize:5
+                                            color:'white'
+                                            font.weight:600
+                                            // color:'white'
+                                            x: 48  ; y: 34.25
+                                            // DragHandler {
+                                            //     onGrabChanged:(transition, eventPoint) => {
+
+
+                                            //         switch (eventPoint.state) {
+                                            //             case EventPoint.Pressed:
+                                            //                 console.log("on press @", eventPoint.position);
+                                            //                 break
+                                            //             case EventPoint.Updated:
+                                            //                 console.log("on update @", eventPoint.position);
+                                            //                 break
+                                            //             case EventPoint.Released:
+                                            //                 console.log("on release @", test.x," ; " ,test.y);
+                                            //                 break
+                                            //             default:
+                                            //                 console.log(eventPoint.position, "state", eventPoint.state)
+                                            //                 break
+                                            //         }
+                                            //     }
+                                            // }
+                                            
+                                            
+                                        }
+                                        Text{
+                                            // id:test
+                                            scale:0.5
+                                            font.family:Fonts.inter
+                                            text:'$120.00'
+                                            font.pointSize:8
+                                            color:'white'
+                                            font.weight:600
+                                            // color:'white'
+                                            x: -5.25  ; y: 12.75
+                                            // DragHandler {
+                                            //     onGrabChanged:(transition, eventPoint) => {
+
+
+                                            //         switch (eventPoint.state) {
+                                            //             case EventPoint.Pressed:
+                                            //                 console.log("on press @", eventPoint.position);
+                                            //                 break
+                                            //             case EventPoint.Updated:
+                                            //                 console.log("on update @", eventPoint.position);
+                                            //                 break
+                                            //             case EventPoint.Released:
+                                            //                 console.log("on release @", test.x," ; " ,test.y);
+                                            //                 break
+                                            //             default:
+                                            //                 console.log(eventPoint.position, "state", eventPoint.state)
+                                            //                 break
+                                            //         }
+                                            //     }
+                                            // }
+                                            
+                                            
+                                        }
+                                        Text{
+                                            id:test
+                                            scale:0.5
+                                            font.family:Fonts.inter
+                                            text:'* * * *  * * * *  * * * *  6057'
+                                            // textFormat:Text.RichText
+                                            font.pointSize:6
+                                            color:'white'
+                                            font.weight:600
+                                            // color:'white'
+                                            x: -5.5  ; y: 21.75
+                                            // DragHandler {
+                                            //     onGrabChanged:(transition, eventPoint) => {
+
+
+                                            //         switch (eventPoint.state) {
+                                            //             case EventPoint.Pressed:
+                                            //                 console.log("on press @", eventPoint.position);
+                                            //                 break
+                                            //             case EventPoint.Updated:
+                                            //                 console.log("on update @", eventPoint.position);
+                                            //                 break
+                                            //             case EventPoint.Released:
+                                            //                 console.log("on release @", test.x," ; " ,test.y);
+                                            //                 break
+                                            //             default:
+                                            //                 console.log(eventPoint.position, "state", eventPoint.state)
+                                            //                 break
+                                            //         }
+                                            //     }
+                                            // }
+                                            
+                                            
+                                        }
 
                                         // scale: PathView.scale
                                         // opacity: 1
