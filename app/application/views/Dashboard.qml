@@ -525,8 +525,8 @@ Rectangle{
                                                 var point=chartView.mapToValue(Qt.point(mouse.x,mouse.y))
                                                 // console.log(Math.round(point.x))
                                                 if ((Math.abs(point.x-Math.round(point.x))<0.5 )) {
-                                                    var seriesPoint = chartView.mapToPosition(Qt.point(Math.round(point.x),series1.at(Math.round(point.x)-1).y));
-                                                    var seriesPoint2 = chartView.mapToPosition(Qt.point(Math.round(point.x),series2.at(Math.round(point.x)-1).y));
+                                                    var seriesPoint = chartView.mapToPosition(Qt.point(Math.round(point.x),series1.at(Math.round(point.x)).y));
+                                                    var seriesPoint2 = chartView.mapToPosition(Qt.point(Math.round(point.x),series2.at(Math.round(point.x)).y));
                                                     // console.log(Math.round(point.x)+ "  "+ series1.at(Math.round(point.x)).y)
                                                     ticket.x = seriesPoint.x - ticket.width / 2; // Center the text horizontally
                                                     // console.log(seriesPoint.x)
@@ -692,6 +692,10 @@ Rectangle{
                                 transformOrigin: Item.TopLeft
                                 // color:"red"
                                 scale:(parent.width/width)
+
+                                // Component.onCompleted:{
+                                //     console.log("my scale " + scale)
+                                // }
                                 Button_ {
                                     id:leftArrow
                                     z:Infinity
