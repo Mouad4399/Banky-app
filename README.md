@@ -43,6 +43,10 @@ ps : still under-development !!!
 
 ![image](https://github.com/user-attachments/assets/f6e98c60-8b56-4ecc-b179-250d414ffffd)
 
+- Cards
+  ![image](https://github.com/user-attachments/assets/0ddbcd1f-3ca1-49eb-bfc8-59535cb1fc85)
+  ![image](https://github.com/user-attachments/assets/ed4f4099-e47b-47dd-a078-3c01ce54114d)
+
 - KYC
 
 ![image](https://github.com/user-attachments/assets/781c4056-6a09-4a1c-88bc-ae157d00c827)
