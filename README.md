@@ -14,6 +14,8 @@ ps : still under-development !!!
 
 - run the app `python ./app`
 
+- login with `mouad@user.com:mouad` or signup and fill KYC form .
+
 # Images
 - Login
 
